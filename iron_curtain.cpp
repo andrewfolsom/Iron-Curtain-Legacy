@@ -127,9 +127,9 @@ class X11_wrapper {
         Window win;
         GLXContext glc;
     public:
-        X11_wrapper() { }
-        X11_wrapper(int w, int h) {
-            GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None};
+        X11_wrapper() {
+            GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, 
+                None};
             XSetWindowAttributes swa;
             setup_screen_res(gl.xres, gl.yres);
             dpy = XOpenDisplay(NULL);
@@ -173,6 +173,9 @@ class X11_wrapper {
         void swapBuffers() {
             glXSwapBuffers(dpy, win);
         }
+        void clearWindow() {
+            XClearWindow(dpy, win);
+        }
         bool getXPending() {
             return XPending(dpy);
         }
@@ -181,13 +184,11 @@ class X11_wrapper {
             XNextEvent(dpy, &e);
             return e;
         }
-} x11(960, 1080);
+} x11;
 
 //Function Prototypes
 void init_opengl(void);
 int check_keys(XEvent *e);
-void moveLeft();
-void moveRight();
 void physics();
 void render();
 
@@ -213,6 +214,7 @@ int main()
         }
         render();
         x11.swapBuffers();
+        x11.clearWindow();
     }
     return 0;
 }
@@ -300,40 +302,6 @@ int check_keys(XEvent *e)
     }
     return 0;
 }
-
-void moveLeft()
-{
-    Ship *s = &g.ship;
-    s->pos[0] -= s->vel[0];
-    if(s->pos[0] < 20.0) {
-        s->pos[0] = 20.0;
-        s->vel[0] = 10.0;
-        return;
-    }
-    if (s->vel[0] > MAX_VELOCITY) {
-        s->vel[0] = MAX_VELOCITY;
-        return;
-    }
-    s->vel[0] += s->speed;
-    return;
-};
-
-void moveRight()
-{
-    Ship *s = &g.ship;
-    s->pos[0] += s->vel[0];
-    if(s->pos[0] > gl.xres - 20.0) {
-        s->pos[0] = gl.xres - 20.0;
-        s->vel[0] = 10.0;
-        return;
-    }
-    if (s->vel[0] > 30) {
-        s->vel[0] = 30;
-        return;
-    }
-    s->vel[0] += s->speed;
-    return;
-};
 
 void physics()
 {
