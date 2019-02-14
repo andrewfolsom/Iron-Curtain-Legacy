@@ -307,11 +307,20 @@ void init_opengl(void)
     //Initialize GLuint's
     int w = img[0].width;
     int h = img[0].height;
+    glGenTextures(1, &gl.nickImage);
+    glGenTextures(1, &gl.andrewImage);
 
     glBindTexture(GL_TEXTURE_2D, gl.nickImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+
+    w = img[1].width;
+    h = img[1].height;
+    glBindTexture(GL_TEXTURE_2D, gl.andrewImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
     //
     //Clear the screen to black
     glClearColor(0.0, 0.0, 0.0, 1.0);
