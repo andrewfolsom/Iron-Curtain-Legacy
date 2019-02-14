@@ -57,6 +57,7 @@ extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);        
 extern void displayNick(float x, float y, GLuint texture);
 extern void displayChad(float x, float y, GLuint texture);
+extern void displayAndrew(float x, float y, GLuint texture);
 //-------------------------------------------------------------------------- 
 
 class Image {
@@ -114,7 +115,7 @@ class Image {
 };
 Image img[4] = {
 "./img/NICKJA.jpg",
-"",
+"./img/andrewimg.png",
 "",
 ""
 };
@@ -124,6 +125,7 @@ class Global {
 	char keys[65536];
 	bool creditPage = false;
 	GLuint nickImage;
+    GLuint andrewImage;
 	Global() {
 	    xres = 900;
 	    yres = 1000;
@@ -536,6 +538,7 @@ void renderCredits()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     displayNick(gl.xres/2, gl.yres/2, gl.nickImage);
+    displayAndrew(gl.xres/4, gl.yres/4, gl.andrewImage);
 }
 
 void render()
