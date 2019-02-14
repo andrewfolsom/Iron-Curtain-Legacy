@@ -9,7 +9,8 @@
 using namespace std;
 
 void showSpencerPicture(int x, int y, GLuint textid) {
-    
+   
+    float wid = 500.0f; 
     gl PushMatrix();
     glTranslate(fx,fy,0);
     glRotatef(a,0,0,0,1.0);
