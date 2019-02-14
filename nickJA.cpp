@@ -5,7 +5,7 @@
 #include <string.h>
 
 
-void displayNick(float x, float y, Gluint texture)
+void displayNick(float x, float y, GLuint texture)
 {
 	float wid = 500.0f;
 	glPushMatrix();	
