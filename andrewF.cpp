@@ -15,4 +15,14 @@ void displayAndrew(float x, float y, GLuint texture)
         glTexCoord2f(0.0f, 1.0f); glVertex2i(res, -res);
     glEnd();
     glPopMatrix();
+
+    unsigned int color = 0x00bfb418;
+    Rect r;
+    r.width = 250.0;
+    r.height = 100.0;
+    r.center = 0;
+    r.left = x + 150;
+    r.bot = y - 15;
+
+    ggprint16(&r, 16, color, "Andrew Folsom");
 }

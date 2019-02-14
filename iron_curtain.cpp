@@ -19,7 +19,7 @@
 #include <X11/keysym.h>                                                      
 #include <GL/glx.h>                                                          
 //#include "log.h"
-////#include "fonts.h"
+#include "fonts.h"
 
 //defined types
 typedef float Flt;
@@ -288,6 +288,7 @@ int main()
 	x11.swapBuffers();
 	x11.clearWindow();
     }
+    cleanup_fonts();
     return 0;
 }
 
@@ -320,7 +321,11 @@ void init_opengl(void)
     glBindTexture(GL_TEXTURE_2D, gl.andrewImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
+            img[1].data);
+
+    initialize_fonts();
+
     //
     //Clear the screen to black
     glClearColor(0.0, 0.0, 0.0, 1.0);
