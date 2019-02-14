@@ -55,6 +55,8 @@ extern double physicsCountdown;
 extern double timeSpan;                                                      
 extern double timeDiff(struct timespec *start, struct timespec *end);        
 extern void timeCopy(struct timespec *dest, struct timespec *source);        
+extern void displayNick(float x, float y, GLuint texture);
+extern void displayChad(float x, float y, GLuint texture);
 //-------------------------------------------------------------------------- 
 
 class Image {
@@ -110,12 +112,18 @@ class Image {
 		unlink(ppmname);
 	}
 };
-
+Image img[4] = {
+"./img/NICKJA.jpg",
+"",
+"",
+""
+};
 class Global {
     public:
 	int xres, yres;
 	char keys[65536];
 	bool creditPage = false;
+	GLuint nickImage;
 	Global() {
 	    xres = 900;
 	    yres = 1000;
@@ -283,6 +291,8 @@ int main()
 
 void init_opengl(void)
 {
+    glEnable(GL_TEXTURE_2D);
+
     glViewport(0, 0, gl.xres, gl.yres);
     glMatrixMode(GL_PROJECTION); glLoadIdentity();
     glMatrixMode(GL_MODELVIEW); glLoadIdentity();
@@ -291,6 +301,15 @@ void init_opengl(void)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_FOG);
     glDisable(GL_CULL_FACE);
+    //
+    //Initialize GLuint's
+    int w = img[0].width;
+    int h = img[0].height;
+
+    glBindTexture(GL_TEXTURE_2D, gl.nickImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
     //
     //Clear the screen to black
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -516,6 +535,7 @@ void physics()
 void renderCredits()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    displayNick(gl.xres/2, gl.yres/2, gl.nickImage);
 }
 
 void render()

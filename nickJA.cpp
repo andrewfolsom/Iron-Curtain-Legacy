@@ -7,7 +7,7 @@
 
 void displayNick(float x, float y, GLuint texture)
 {
-	float wid = 500.0f;
+	float wid = 100.0f;
 	glPushMatrix();	
 	glTranslatef(x, y, 0.0);
 	glBindTexture(GL_TEXTURE_2D, texture);
