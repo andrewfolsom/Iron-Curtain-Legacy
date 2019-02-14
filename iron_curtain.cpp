@@ -57,6 +57,7 @@ extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);        
 extern void displayNick(float x, float y, GLuint texture);
 extern void displayChad(float x, float y, GLuint texture);
+extern void displayAndrew(float x, float y, GLuint texture);
 //-------------------------------------------------------------------------- 
 
 class Image {
@@ -114,7 +115,7 @@ class Image {
 };
 Image img[4] = {
 "./img/NICKJA.jpg",
-"",
+"./img/andrewimg.png",
 "",
 ""
 };
@@ -124,6 +125,7 @@ class Global {
 	char keys[65536];
 	bool creditPage = false;
 	GLuint nickImage;
+    GLuint andrewImage;
 	Global() {
 	    xres = 900;
 	    yres = 1000;
@@ -305,11 +307,20 @@ void init_opengl(void)
     //Initialize GLuint's
     int w = img[0].width;
     int h = img[0].height;
+    glGenTextures(1, &gl.nickImage);
+    glGenTextures(1, &gl.andrewImage);
 
     glBindTexture(GL_TEXTURE_2D, gl.nickImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+
+    w = img[1].width;
+    h = img[1].height;
+    glBindTexture(GL_TEXTURE_2D, gl.andrewImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
     //
     //Clear the screen to black
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -536,6 +547,7 @@ void renderCredits()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     displayNick(gl.xres/2, gl.yres/2, gl.nickImage);
+    displayAndrew(gl.xres/4, gl.yres/4, gl.andrewImage);
 }
 
 void render()
