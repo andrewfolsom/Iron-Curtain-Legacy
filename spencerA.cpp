@@ -14,7 +14,7 @@ void showSpencerPicture(int x, int y, GLuint textid) {
     
     glColor3ub(255,255,0);
     glPushMatrix();
-    glTranslate(x,y,0.0);
+    glTranslatef(x,y,0.0);
     glBindTexture(GL_TEXTURE_2D, textid);
     glBegin (GL_QUADS);
     	glTexCoord2f(0.0f,1.0f); glVertex2i(-wid,-wid);
