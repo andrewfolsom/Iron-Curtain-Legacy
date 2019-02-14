@@ -1,18 +1,15 @@
 #include <iostream>
+#include <X11/Xlib.h>
+#include <X11/keysym.h>
+#include <GL/glx.h>
+#include "fonts.h"
+#include <string.h>
+
 
 using namespace std;
 
 void showSpencerPicture(int x, int y, GLuint textid) {
-    glColor3ub(255,255,255);
-    static float angle = 0.0f;
-    static int wid = 30;
-    wid += sin(angle) * 10;
-    float fx = (float)x;
-    float fy = (float)y;
-    float a = 0;
-    a += sin(angle) * 10.0f;
-    fx += a;
-    angle += 0,2f;
+    
     gl PushMatrix();
     glTranslate(fx,fy,0);
     glRotatef(a,0,0,0,1.0);
