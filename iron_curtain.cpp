@@ -119,7 +119,7 @@ Image img[5] = {
     "./img/NICKJA.jpg",
     "./img/andrewimg.png",
     "./img/spencerA.jpg",
-    "./img/chad-egg.png",
+    "./img/chad-egg.jpg",
     "./img/BGarza.jpg"
 };
 class Global {
