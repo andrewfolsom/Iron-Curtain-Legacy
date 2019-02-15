@@ -27,7 +27,7 @@ void displayNick(float x, float y, GLuint texture)
     r.height = 100;
     r.width = 500;
     r.bot = r.centery - 15;
-    r.left = r.centerx;
+    r.left = r.centerx - 50;
     ggprint16(&r, 16, color, "Nick Jackson");
 
 
