@@ -115,10 +115,10 @@ class Image {
 	}
 };
 Image img[4] = {
-"./img/NICKJA.jpg",
-"./img/andrewimg.png",
-"./img/spencerA.jpg",
-""
+    "./img/NICKJA.jpg",
+    "./img/andrewimg.png",
+    "./img/spencerA.jpg",
+    "./img/chad-egg.png"
 };
 class Global {
     public:
@@ -126,8 +126,9 @@ class Global {
 	char keys[65536];
 	bool creditPage = false;
 	GLuint nickImage;
-    GLuint andrewImage;
-    GLuint spencerImage;
+	GLuint andrewImage;
+	GLuint spencerImage;
+	GLuint chadImage;
 	Global() {
 	    xres = 900;
 	    yres = 1000;
@@ -285,7 +286,7 @@ int main()
 	if(gl.creditPage){
 	    renderCredits();    
 	} else {
-		render();
+	    render();
 	}
 	x11.swapBuffers();
 	x11.clearWindow();
@@ -313,6 +314,7 @@ void init_opengl(void)
     glGenTextures(1, &gl.nickImage);
     glGenTextures(1, &gl.andrewImage);
     glGenTextures(1, &gl.spencerImage);
+    glGenTextures(1, &gl.chadImage);
 
     glBindTexture(GL_TEXTURE_2D, gl.nickImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -325,15 +327,21 @@ void init_opengl(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
-            img[1].data);
-            
-     w = img[2].width;
+	    img[1].data);
+
+    w = img[2].width;
     h = img[2].height;
     glBindTexture(GL_TEXTURE_2D, gl.spencerImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
 
+    w = img[3].width;
+    h = img[3].height;
+    glBindTexture(GL_TEXTURE_2D, gl.chadImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
     initialize_fonts();
 
     //
@@ -561,11 +569,12 @@ void physics()
 void renderCredits()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    
-    
+
+
     displaySpencer( 700  , 250, gl.spencerImage); 
     displayNick(gl.xres/2, gl.yres/2, gl.nickImage);
     displayAndrew(gl.xres/4, gl.yres/4, gl.andrewImage);
+    displayChad( 700, gl.yres/2 + 250, gl.chadImage); 
 
 
 }
