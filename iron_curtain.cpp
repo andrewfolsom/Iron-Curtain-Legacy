@@ -4,8 +4,8 @@
 //date:    2014 - 2018                                                       
 //mod spring 2015: added constructors                                        
 //This program is a game starting point for a 3350 project.                  
-//                                                                           
-//                                                                           
+//            
+
 #include <iostream>                                                          
 #include <cstdlib>                                                           
 #include <cstring>                                                           
@@ -58,6 +58,7 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 extern void displayNick(float x, float y, GLuint texture);
 extern void displayChad(float x, float y, GLuint texture);
 extern void displayAndrew(float x, float y, GLuint texture);
+extern void displaySpencer(float x, float y, GLuint texture);
 //-------------------------------------------------------------------------- 
 
 class Image {
@@ -116,7 +117,7 @@ class Image {
 Image img[4] = {
 "./img/NICKJA.jpg",
 "./img/andrewimg.png",
-"",
+"./img/spencerA.jpg",
 ""
 };
 class Global {
@@ -126,6 +127,7 @@ class Global {
 	bool creditPage = false;
 	GLuint nickImage;
     GLuint andrewImage;
+    GLuint spencerImage;
 	Global() {
 	    xres = 900;
 	    yres = 1000;
@@ -310,6 +312,7 @@ void init_opengl(void)
     int h = img[0].height;
     glGenTextures(1, &gl.nickImage);
     glGenTextures(1, &gl.andrewImage);
+    glGenTextures(1, &gl.spencerImage);
 
     glBindTexture(GL_TEXTURE_2D, gl.nickImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -323,6 +326,13 @@ void init_opengl(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
             img[1].data);
+            
+     w = img[2].width;
+    h = img[2].height;
+    glBindTexture(GL_TEXTURE_2D, gl.spencerImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
 
     initialize_fonts();
 
@@ -551,8 +561,13 @@ void physics()
 void renderCredits()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    
+    displaySpencer( 700  , 250, gl.spencerImage); 
     displayNick(gl.xres/2, gl.yres/2, gl.nickImage);
     displayAndrew(gl.xres/4, gl.yres/4, gl.andrewImage);
+
+
 }
 
 void render()
@@ -584,3 +599,4 @@ void render()
 	glPopMatrix();
     }
 }
+
