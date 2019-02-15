@@ -132,12 +132,24 @@ class Global {
 	GLuint spencerImage;
 	GLuint chadImage;
 	GLuint benImg;
+    static Global& getInstance() {
+        static Global gl;
+        return gl;
+    }
+
+    private:
 	Global() {
 	    xres = 900;
 	    yres = 1000;
 	    memset(keys, 0, 65536);
 	}
-} gl;
+
+    public:
+    Global(Global const&) = delete;
+    void operator=(Global const&) = delete;
+};
+
+static Global& gl = Global::getInstance();
 
 class Ship {
     public:
