@@ -10,31 +10,32 @@
 #include <iostream>
 #include <unistd.h>
 #include <GL/glx.h>
-#include "log.h"
 #include "fonts.h"
 
 using namespace std;
 
-public void BenjaminG(float x, float y, GLuint texture) {
+void BenjaminG(float x, float y, GLuint texture) {
     Rect r;
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    r.bot = gl.yres - 20;
-    r.left = 10;
-    r.center = 0;
-    ggprint8b(&r, 16, 0x00000000, "Benjamin A Garza");
+    //glClear(GL_COLOR_BUFFER_BIT);
+    r.width = 250.0;
+    r.height = 100.0;
+    r.center = x;
+    r.left = x - 10;
+    r.bot = y - 125;
     
     float wid = 100.0f;
-	glPushMatrix();	
-	glTranslatef(x, y, 0.0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
- 	glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
- 	glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
- 	glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-	glEnd();
-	glPopMatrix();
+    glPushMatrix();
+    glTranslatef(x, y, 0.0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glColor3ub(255, 255, 255);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid, -wid);
+    glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+    glTexCoord2f(1.0f, 0.0f); glVertex2i(wid, wid);
+    glTexCoord2f(1.0f, 1.0f); glVertex2i(wid, -wid);
+    glEnd();
+    glPopMatrix();
 
+    ggprint8b(&r, 16, 0x00ffffff, "Benjamin A Garza");
 }
 

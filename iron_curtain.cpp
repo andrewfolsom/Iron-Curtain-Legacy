@@ -59,6 +59,7 @@ extern void displayNick(float x, float y, GLuint texture);
 extern void displayChad(float x, float y, GLuint texture);
 extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
+extern void BenjaminG(float x, float y, GLuint texture);
 //-------------------------------------------------------------------------- 
 
 class Image {
@@ -114,11 +115,12 @@ class Image {
 		unlink(ppmname);
 	}
 };
-Image img[4] = {
+Image img[5] = {
     "./img/NICKJA.jpg",
     "./img/andrewimg.png",
     "./img/spencerA.jpg",
-    "./img/chad-egg.png"
+    "./img/chad-egg.png",
+    "./img/BGarza.jpg"
 };
 class Global {
     public:
@@ -129,6 +131,7 @@ class Global {
 	GLuint andrewImage;
 	GLuint spencerImage;
 	GLuint chadImage;
+	GLuint benImg;
 	Global() {
 	    xres = 900;
 	    yres = 1000;
@@ -315,7 +318,8 @@ void init_opengl(void)
     glGenTextures(1, &gl.andrewImage);
     glGenTextures(1, &gl.spencerImage);
     glGenTextures(1, &gl.chadImage);
-
+    glGenTextures(1, &gl.benImg);
+    
     glBindTexture(GL_TEXTURE_2D, gl.nickImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -343,6 +347,13 @@ void init_opengl(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
     initialize_fonts();
+
+    w = img[4].width;
+    h = img[4].height;
+    glBindTexture(GL_TEXTURE_2D, gl.benImg);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
 
     //
     //Clear the screen to black
@@ -575,7 +586,7 @@ void renderCredits()
     displayNick(gl.xres/2, gl.yres/2, gl.nickImage);
     displayAndrew(gl.xres/4, gl.yres/4, gl.andrewImage);
     displayChad( 700, gl.yres/2 + 250, gl.chadImage); 
-
+    BenjaminG(gl.xres/4, 3*gl.yres/4, gl.benImg);
 
 }
 
