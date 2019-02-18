@@ -20,9 +20,9 @@ void displayAndrew(float x, float y, GLuint texture)
     Rect r;
     r.width = 250.0;
     r.height = 100.0;
-    r.center = 0;
-    r.left = x + 150;
-    r.bot = y - 15;
+    r.center = x;
+    r.left = x;
+    r.bot = y - 125;
 
     ggprint16(&r, 16, color, "Andrew Folsom");
 }

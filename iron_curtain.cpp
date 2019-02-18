@@ -322,52 +322,7 @@ void init_opengl(void)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_FOG);
     glDisable(GL_CULL_FACE);
-    //
-    //Initialize GLuint's
-    int w = img[0].width;
-    int h = img[0].height;
-    glGenTextures(1, &gl.nickImage);
-    glGenTextures(1, &gl.andrewImage);
-    glGenTextures(1, &gl.spencerImage);
-    glGenTextures(1, &gl.chadImage);
-    glGenTextures(1, &gl.benImg);
-    
-    glBindTexture(GL_TEXTURE_2D, gl.nickImage);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
 
-    w = img[1].width;
-    h = img[1].height;
-    glBindTexture(GL_TEXTURE_2D, gl.andrewImage);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
-	    img[1].data);
-
-    w = img[2].width;
-    h = img[2].height;
-    glBindTexture(GL_TEXTURE_2D, gl.spencerImage);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
-
-    w = img[3].width;
-    h = img[3].height;
-    glBindTexture(GL_TEXTURE_2D, gl.chadImage);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
-    initialize_fonts();
-
-    w = img[4].width;
-    h = img[4].height;
-    glBindTexture(GL_TEXTURE_2D, gl.benImg);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
-
-    //
     //Clear the screen to black
     glClearColor(0.0, 0.0, 0.0, 1.0);
 }
@@ -591,6 +546,50 @@ void physics()
 
 void renderCredits()
 {
+    int w = img[0].width;
+    int h = img[0].height;
+    glGenTextures(1, &gl.nickImage);
+    glGenTextures(1, &gl.andrewImage);
+    glGenTextures(1, &gl.spencerImage);
+    glGenTextures(1, &gl.chadImage);
+    glGenTextures(1, &gl.benImg);
+    
+    glBindTexture(GL_TEXTURE_2D, gl.nickImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+
+    w = img[1].width;
+    h = img[1].height;
+    glBindTexture(GL_TEXTURE_2D, gl.andrewImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
+	    img[1].data);
+
+    w = img[2].width;
+    h = img[2].height;
+    glBindTexture(GL_TEXTURE_2D, gl.spencerImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
+
+    w = img[3].width;
+    h = img[3].height;
+    glBindTexture(GL_TEXTURE_2D, gl.chadImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
+    initialize_fonts();
+
+    w = img[4].width;
+    h = img[4].height;
+    glBindTexture(GL_TEXTURE_2D, gl.benImg);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
+
+
     glClear(GL_COLOR_BUFFER_BIT);
 
 
