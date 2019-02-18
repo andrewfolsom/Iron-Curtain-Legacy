@@ -20,6 +20,7 @@
 #include <GL/glx.h>                                                          
 //#include "log.h"
 #include "fonts.h"
+#include <stdio.h>
 
 //defined types
 typedef float Flt;
@@ -114,7 +115,7 @@ class Image
 			}
 			if (!ppmFlag)
 				unlink(ppmname);
-		}
+	}
 };
 Image img[5] = {
 	"./img/NICKJA.jpg",
