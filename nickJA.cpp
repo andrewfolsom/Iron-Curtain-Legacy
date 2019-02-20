@@ -11,9 +11,9 @@ void displayNick(float x, float y, GLuint texture)
     glBindTexture(GL_TEXTURE_2D, texture);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
- 	glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
- 	glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
- 	glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+	glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+	glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+	glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
 	glEnd();
 	glPopMatrix();
 
@@ -26,6 +26,4 @@ void displayNick(float x, float y, GLuint texture)
     r.bot = r.centery - 15;
     r.left = r.centerx - 50;
     ggprint16(&r, 16, color, "Nick Jackson");
-
-
 }
