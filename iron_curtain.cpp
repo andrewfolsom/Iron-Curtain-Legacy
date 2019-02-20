@@ -124,6 +124,13 @@ void init_opengl(void)
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_FOG);
 	glDisable(GL_CULL_FACE);
+	
+	glGenTextures(1, &gl.nickImage);
+	glGenTextures(1, &gl.andrewImage);
+	glGenTextures(1, &gl.spencerImage);
+	glGenTextures(1, &gl.chadImage);
+	glGenTextures(1, &gl.benImg);
+
 
 	//Clear the screen to black
 	glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -353,11 +360,6 @@ void render()
 
 		int w = img[0].width;
 		int h = img[0].height;
-		glGenTextures(1, &gl.nickImage);
-		glGenTextures(1, &gl.andrewImage);
-		glGenTextures(1, &gl.spencerImage);
-		glGenTextures(1, &gl.chadImage);
-		glGenTextures(1, &gl.benImg);
 
 		glBindTexture(GL_TEXTURE_2D, gl.nickImage);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
