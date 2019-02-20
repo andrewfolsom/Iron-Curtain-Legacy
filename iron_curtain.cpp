@@ -21,6 +21,7 @@
 //#include "log.h"
 #include "fonts.h"
 #include <stdio.h>
+#include "core.h"
 
 //defined types
 typedef float Flt;
@@ -63,60 +64,6 @@ extern void displaySpencer(float x, float y, GLuint texture);
 extern void BenjaminG(float x, float y, GLuint texture);
 //-------------------------------------------------------------------------- 
 
-class Image
-{
-	public:
-		int width, height;
-		unsigned char *data;
-		~Image() { delete [] data; }
-		Image(const char *fname) {
-			if (fname[0] == '\0')
-				return;
-			//printf("fname **%s**\n", fname);
-			int ppmFlag = 0;
-			char name[40];
-			strcpy(name, fname);
-			int slen = strlen(name);
-			char ppmname[80];
-			if (strncmp(name+(slen-4), ".ppm", 4) == 0)
-				ppmFlag = 1;
-			if (ppmFlag) {
-				strcpy(ppmname, name);
-			} else {
-				name[slen-4] = '\0';
-				//printf("name **%s**\n", name);
-				sprintf(ppmname,"%s.ppm", name);
-				//printf("ppmname **%s**\n", ppmname);
-				char ts[100];
-				//system("convert eball.jpg eball.ppm");
-				sprintf(ts, "convert %s %s", fname, ppmname);
-				system(ts);
-			}
-			//sprintf(ts, "%s", name);
-			FILE *fpi = fopen(ppmname, "r");
-			if (fpi) {
-				char line[200];
-				fgets(line, 200, fpi);
-				fgets(line, 200, fpi);
-				//skip comments and blank lines
-				while (line[0] == '#' || strlen(line) < 2)
-					fgets(line, 200, fpi);
-				sscanf(line, "%i %i", &width, &height);
-				fgets(line, 200, fpi);
-				//get pixel data
-				int n = width * height * 3;			
-				data = new unsigned char[n];			
-				for (int i=0; i<n; i++)
-					data[i] = fgetc(fpi);
-				fclose(fpi);
-			} else {
-				printf("ERROR opening image: %s\n",ppmname);
-				exit(0);
-			}
-			if (!ppmFlag)
-				unlink(ppmname);
-	}
-};
 Image img[5] = {
 	"./img/NICKJA.jpg",
 	"./img/andrewimg.png",
@@ -124,158 +71,12 @@ Image img[5] = {
 	"./img/chad-egg.jpg",
 	"./img/BGarza.jpg"
 };
-class Global 
-{
-	public:
-		int xres, yres;
-		char keys[65536];
-		bool creditPage = false;
-		GLuint nickImage;
-		GLuint andrewImage;
-		GLuint spencerImage;
-		GLuint chadImage;
-		GLuint benImg;
-		static Global& getInstance() {
-			static Global gl;
-			return gl;
-		}
 
-	private:
-		Global() {
-			xres = 900;
-			yres = 1000;
-			memset(keys, 0, 65536);
-		}
+Global& gl = Global::getInstance();
 
-	public:
-		Global(Global const&) = delete;
-		void operator=(Global const&) = delete;
-};
+Game g;
 
-static Global& gl = Global::getInstance();
-
-class Ship 
-{
-	public:
-		Vec pos;
-		//Vec vel;
-		float vel[4];
-		float speed;
-		float color[3];
-		int weaponType;
-	public:
-		Ship() {
-			pos[0] = (Flt)(gl.xres/2);
-			pos[1] = (Flt)(100);
-			pos[2] = 0.0f;
-			//VecZero(vel);
-			vel[0] = (Flt)(0);
-			vel[1] = (Flt)(0);
-			vel[2] = (Flt)(0);
-			vel[3] = (Flt)(0);
-			speed = 0.4;
-			color[0] = color[1] = color[2] = 1.0;
-			weaponType = 0;
-		}
-};
-
-class Bullet 
-{
-	public:
-		Vec pos;
-		Vec vel;
-		float color[3];
-		struct timespec time;
-	public:
-		Bullet() { }
-};
-
-class Game 
-{
-	public:
-		Ship ship;
-		Bullet *barr;
-		int nbullets;
-		struct timespec bulletTimer;
-		struct timespec thrustTimer;
-		bool thrustOn;
-	public:
-		Game() {
-			thrustOn = false;
-			barr = new Bullet[MAX_BULLETS];
-			nbullets = 0;
-			clock_gettime(CLOCK_REALTIME, &bulletTimer);
-		}
-		~Game() {
-			delete [] barr;
-		}
-} g;
-
-class X11_wrapper 
-{
-	private:
-		Display *dpy;
-		Window win;
-		GLXContext glc;
-	public:
-		X11_wrapper() {
-			GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, 
-				None};
-			XSetWindowAttributes swa;
-			setup_screen_res(gl.xres, gl.yres);
-			dpy = XOpenDisplay(NULL);
-			if (dpy == NULL) {
-				std::cout << "\n\tcannot connect to X server" << std::endl;
-				exit(EXIT_FAILURE);
-			}
-			Window root = DefaultRootWindow(dpy);
-			XWindowAttributes getWinAttr;
-			XGetWindowAttributes(dpy, root, &getWinAttr);
-			//
-			XVisualInfo *vi = glXChooseVisual(dpy, 0, att);
-			if (vi == NULL) {
-				std::cout << "\n\tno appropriate visual found\n" << std::endl;
-				exit(EXIT_FAILURE);
-			}
-			Colormap cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
-			swa.colormap = cmap;
-			swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |      
-				PointerMotionMask | MotionNotify | ButtonPress | ButtonRelease | 
-				StructureNotifyMask | SubstructureNotifyMask;
-			unsigned int winops = CWBorderPixel | CWColormap | CWEventMask;
-			win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0, vi->depth,
-					InputOutput, vi->visual, winops, &swa);
-			set_title();
-			glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
-			glXMakeCurrent(dpy, win, glc);
-		}
-		~X11_wrapper() {
-			XDestroyWindow(dpy, win);
-			XCloseDisplay(dpy);
-		}
-		void set_title() {
-			XMapWindow(dpy, win);
-			XStoreName(dpy, win, "Test Game");
-		}
-		void setup_screen_res(const int w, const int h) {
-			gl.xres = w;
-			gl.yres = h;
-		}
-		void swapBuffers() {
-			glXSwapBuffers(dpy, win);
-		}
-		void clearWindow() {
-			XClearWindow(dpy, win);
-		}
-		bool getXPending() {
-			return XPending(dpy);
-		}
-		XEvent getXNextEvent() {
-			XEvent e;
-			XNextEvent(dpy, &e);
-			return e;
-		}
-} x11;
+X11_wrapper x11;
 
 //Function Prototypes
 void init_opengl(void);
