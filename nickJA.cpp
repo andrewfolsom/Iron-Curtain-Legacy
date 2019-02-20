@@ -1,6 +1,16 @@
+//Author: Nick Jackson
+//Created: Feb 13 2019
+//
+//Contains:
+//Personal Display Function
+//MOVEMNT
+//
+
 #include <GL/glx.h>
 #include "fonts.h"
+#include "core.h"
 
+//Class Definitions
 
 void displayNick(float x, float y, GLuint texture)
 {
@@ -26,4 +36,13 @@ void displayNick(float x, float y, GLuint texture)
 	r.bot = r.centery - 15;
 	r.left = r.centerx - 50;
 	ggprint16(&r, 16, color, "Nick Jackson");
+}
+
+void spawnOpFor(int x, int y, int movType, Game g)
+{
+	opForShip newGuy;
+	newGuy.pos[0] = x;
+	newGuy.pos[1] = y;
+	newGuy.movPattern = movType;
+	g.numOpFor++;
 }

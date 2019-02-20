@@ -112,6 +112,15 @@ Ship::Ship() {
 }
 
 /*
+ * OpFor Class
+ *	Jackson
+ */
+opForShip::opForShip()
+{
+
+}
+
+/*
  * Bullet Class
  */
 
