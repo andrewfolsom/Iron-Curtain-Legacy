@@ -183,8 +183,13 @@ int check_keys(XEvent *e)
 				break;
 			case XK_Escape:
 				return 1;
-			case XK_l:
-				g.ship.weaponType ^= 1;
+			case XK_1:
+				delete wpn;
+				wpn = new Basic;
+				break;
+			case XK_2:
+				delete wpn;
+				wpn = new Rapid;
 				break;
 		}
 	}
@@ -300,39 +305,7 @@ void physics()
 	}
 
 	if (gl.keys[XK_space]) {
-		struct timespec bt;
-		clock_gettime(CLOCK_REALTIME, &bt);
-		double ts = timeDiff(&g.bulletTimer, &bt);
-		if (s->weaponType == 0) {
-			wpn->fire();
-		} else if (s->weaponType == 1) {
-			if (ts > 0.3) {
-				timeCopy(&g.bulletTimer, &bt);
-				if (g.nbullets < MAX_BULLETS) {
-					for (int i = 0; i < 3; i++) {
-						Bullet *b = &g.barr[g.nbullets];
-						timeCopy(&b->time, &bt);
-						b->pos[0] = s->pos[0];
-						b->pos[1] = s->pos[1] + 30;
-						if (i == 0) {
-							b->vel[0] = -15.0;
-							b->vel[1] = 30.0;
-						} else if (i == 1) {
-							b->vel[0] = 0.0;
-							b->vel[1] = 30.0;
-						} else if (i == 2) {
-							b->vel[0] = 15.0;
-							b->vel[1] = 30.0;
-						}
-						b->color[0] = 0.5;
-						b->color[1] = 1.0;
-						b->color[2] = 1.0;
-						g.nbullets++;
-
-					}
-				}
-			}
-		}
+		wpn->fire();
 	}
 	if (g.thrustOn) {
 		struct timespec mtt;

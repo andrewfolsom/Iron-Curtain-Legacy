@@ -138,7 +138,7 @@ void Basic::fire()
 
 Rapid::Rapid()
 {
-    fireRate = 0.1;
+    fireRate = 0.25;
 }
 
 // Scatter::Scatter()

@@ -15,7 +15,7 @@ public:
 	float color[3];
 public:
 	Weapon();
-	~Weapon();
+	virtual ~Weapon();
 	void setPosition(float*, float*);
 	virtual void setVelocity(float*);
 	void setColor(float*);
