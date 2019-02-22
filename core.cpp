@@ -100,7 +100,7 @@ Global& Global::getInstance()
 Ship::Ship() {
 	pos[0] = (Flt)(gl.xres/2);
 	pos[1] = (Flt)(100);
-	pos[2] = 0.0f;
+	pos[2] = 1.0f;
 	//VecZero(vel);
 	vel[0] = (Flt)(0);
 	vel[1] = (Flt)(0);

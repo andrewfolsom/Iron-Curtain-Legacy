@@ -398,7 +398,8 @@ void render()
 		BenjaminG(gl.xres/4, 3*gl.yres/4, gl.benImg);
 	} else {
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
 		//Draw player ship
 		glColor3fv(g.ship.color);
 		glPushMatrix();
@@ -424,6 +425,7 @@ void render()
 			glEnd();
 			glPopMatrix();
 		}
+		glDisable(GL_DEPTH_TEST);
 	}
 }
 
