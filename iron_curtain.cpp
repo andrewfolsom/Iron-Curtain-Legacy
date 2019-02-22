@@ -79,6 +79,8 @@ Game g;
 X11_wrapper x11;
 
 //Function Prototypes
+double getTimeSlice(timespec* bt);
+float convertToRads(float angle);
 void init_opengl(void);
 int check_keys(XEvent *e);
 void physics();
@@ -434,3 +436,27 @@ void render()
 	}
 }
 
+// Utility Functions
+
+/**
+ * Gets the time differential between the last time an event occured and now
+ * @param timespec *bt 	Pointer to a timespec struct
+ * @return double ts 	Time slice representing the elapsed time
+ */
+double getTimeSlice(timespec *bt)
+{
+    clock_gettime(CLOCK_REALTIME, bt);
+    double ts = timeDiff(&g.bulletTimer, bt);
+    return ts;
+}
+
+/**
+ * Converts degrees to radians
+ * @param float angle 		The angle to be converted to radians
+ * @return float radian 	Value representing the inputed angle
+ */
+float convertToRads(float angle)
+{
+    float rads = angle * (PI / 180);
+    return rads;
+}
