@@ -22,6 +22,7 @@
 #include "fonts.h"
 #include <stdio.h>
 #include "core.h"
+#include "andrewF.h"
 
 //defined types
 typedef float Flt;
@@ -77,6 +78,8 @@ Global& gl = Global::getInstance();
 Game g;
 
 X11_wrapper x11;
+
+Weapon *wpn = new Basic;
 
 //Function Prototypes
 double getTimeSlice(timespec* bt);
@@ -301,21 +304,7 @@ void physics()
 		clock_gettime(CLOCK_REALTIME, &bt);
 		double ts = timeDiff(&g.bulletTimer, &bt);
 		if (s->weaponType == 0) {
-			if (ts > 0.1) {
-				timeCopy(&g.bulletTimer, &bt);
-				if (g.nbullets < MAX_BULLETS) {
-					Bullet *b = &g.barr[g.nbullets];
-					timeCopy(&b->time, &bt);
-					b->pos[0] = s->pos[0];
-					b->pos[1] = s->pos[1] + 30;
-					b->vel[0] = 0.0;
-					b->vel[1] = 30.0;
-					b->color[0] = 1.0f;
-					b->color[1] = 0.5f;
-					b->color[2] = 1.0f;
-					g.nbullets++;
-				}
-			}
+			wpn->fire();
 		} else if (s->weaponType == 1) {
 			if (ts > 0.3) {
 				timeCopy(&g.bulletTimer, &bt);
