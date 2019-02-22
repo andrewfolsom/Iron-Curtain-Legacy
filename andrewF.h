@@ -17,7 +17,7 @@ public:
 	Weapon();
 	virtual ~Weapon();
 	void setPosition(float*, float*);
-	virtual void setVelocity(float*);
+	void setVelocity(float*);
 	void setColor(float*);
 	virtual void fire() =0;
 };
@@ -35,15 +35,18 @@ public:
 	Rapid();
 };
 
-// class Scatter : public Weapon
-// {
-// public:
-// 	int shotsFired;
-// 	float spread;
-// public:
-// 	Scatter();
-// 	void setVelocity(float*);
-// 	void fire();
-// };
+class Scatter : public Weapon
+{
+public:
+	int shotsFired;
+	float spread;
+	float start;
+	float increment;
+	float temp;
+public:
+	Scatter();
+	void bulletSpread(float*);
+	void fire();
+};
 
 #endif

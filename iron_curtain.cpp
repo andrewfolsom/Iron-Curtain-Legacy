@@ -191,6 +191,10 @@ int check_keys(XEvent *e)
 				delete wpn;
 				wpn = new Rapid;
 				break;
+			case XK_3:
+				delete wpn;
+				wpn = new Scatter;
+				break;
 		}
 	}
 

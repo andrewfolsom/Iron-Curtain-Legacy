@@ -43,20 +43,6 @@ void displayAndrew(float x, float y, GLuint texture)
     ggprint16(&r, 16, color, "Andrew Folsom");
 }
 
-/**
- * Generate bullets that will move within a specified spread
- * @param int shots     Number of bullets within the spread
- * @param float spread  The degree of spread desired
- * @param float *bull   Array of bullet objects to be adjusted
- */
-void bulletSpread(int shots, float spread, float *xVel)
-{
-    float start = 90 - (spread/2.0);
-    float increment = spread / shots;
-    xVel[0] = xVel[1] * convertToRads(start);
-    start += increment;
-}
-
 //===========================================================
 // DEFINITION OF WEAPON CLASS AND IT'S DERIVED CLASSES
 //===========================================================
@@ -141,14 +127,49 @@ Rapid::Rapid()
     fireRate = 0.25;
 }
 
-// Scatter::Scatter()
-// {
-//     shotsFired = 4;
-//     spread = 60.0;
-// }
+Scatter::Scatter()
+{
+    fireRate = 0.5;
+    bulletSpeed = 10;
+    color[0] = 0.5;
+    color[1] = 1.0;
+    color[2] = 0.5;
+    shotsFired = 4;
+    spread = 30.0;
+    start = 90 - (spread / 2);
+    increment = spread / (shotsFired - 1);
+    temp = 0.0;
+}
 
-// void Scatter::setVelocity(float *vel)
-// {
-//     vel[1] = 15;
-//     bulletSpread(shotsFired, spread, vel);
-// }
+/**
+ * Generate bullets that will move within a specified spread
+ * @param int shots     Number of bullets within the spread
+ * @param float spread  The degree of spread desired
+ * @param float *bull   Array of bullet objects to be adjusted
+ */
+void Scatter::bulletSpread(float *vel)
+{
+    vel[0] = vel[1] * cos(convertToRads(temp));
+    vel[1] = vel[1] * sin(convertToRads(temp));
+}
+
+void Scatter::fire()
+{
+    temp = start;
+    struct timespec bt;
+    if (getTimeSlice(&bt) > fireRate) {
+        timeCopy(&g.bulletTimer, &bt);
+        for (int i = 0; i < shotsFired; i++) {
+            if(g.nbullets < MAX_BULLETS) {
+                Bullet *b = &g.barr[g.nbullets];
+                timeCopy(&b->time, &bt);
+                setPosition(g.ship.pos, b->pos);
+                setVelocity(b->vel);
+                bulletSpread(b->vel);
+                setColor(b->color);
+                temp += increment;
+                g.nbullets++;
+            }
+        }
+    }
+}
