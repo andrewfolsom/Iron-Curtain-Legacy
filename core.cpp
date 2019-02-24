@@ -12,6 +12,7 @@
 #include <GL/glx.h>
 #include "core.h"
 #include "andrewF.h"
+#include "chadM.h"
 
 typedef float Flt;
 typedef float Vec[3];
@@ -108,6 +109,8 @@ Ship::Ship() {
 	vel[1] = (Flt)(0);
 	vel[2] = (Flt)(0);
 	vel[3] = (Flt)(0);
+	radius = 25.0;
+	nextShip = prevShip = NULL;
 	speed = 0.4;
 	color[0] = color[1] = color[2] = 1.0;
 	weaponType = 0;

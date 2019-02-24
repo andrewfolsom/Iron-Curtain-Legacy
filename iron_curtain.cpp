@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include "core.h"
 #include "andrewF.h"
+#include "chadM.h"
 
 //defined types
 typedef float Flt;
@@ -68,10 +69,8 @@ extern void displayChad(float x, float y, GLuint texture);
 extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
 extern void BenjaminG(float x, float y, GLuint texture);
-extern double dotProduct(float *a, float *b);
-extern double perpDotProduct(float *a, float *b);
-extern void angularAdjustment(float *vel, float angle);
 extern void tracking(Missile *m, float *target, float t);
+extern void renderShip(Ship ship); 
 //-------------------------------------------------------------------------- 
 
 Image img[5] = {
@@ -91,6 +90,8 @@ X11_wrapper x11;
 Weapon *wpn = new Basic;
 
 Weapon *scnd = new Secondary;
+
+EnemyShip eShip;
 
 //Function Prototypes
 double getTimeSlice(timespec* bt);
@@ -288,6 +289,40 @@ void physics()
 		i++;
 	}
 
+	//Collision with bullets?
+	//If collision detected:
+	//     1. delete the bullet
+	//     2. delete the ship 
+	// TODO : FINISH FUNCTION --CHAD
+	s = &eShip;
+	while (s != NULL) {
+		//is there a bullet within its radius?
+		int i=0;
+		while (i < g.nbullets) {
+			Bullet *b = &g.barr[i];
+			Flt d0 = b->pos[0] - s->pos[0];
+			Flt d1 = b->pos[1] - s->pos[1];
+			Flt dist = (d0*d0 + d1*d1);
+			if (dist < (s->radius*s->radius)) {
+				//delete the ship
+				//memcpy(s[i], s[s.armadaSize()-1], sizeof(Ship));
+				//s.decreaseArmada()
+				//delete the bullet...
+				//memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
+				g.nbullets--;
+				if (s == NULL)
+					break;
+			}
+
+			i++;
+		}
+		if (s == NULL)
+			break;
+		s = s->nextShip;
+	}
+
+	s = &g.ship;
+
 	if (gl.keys[XK_a]) {
 		s->pos[0] -= s->vel[0];
 		s->vel[0] += s->speed;
@@ -417,17 +452,10 @@ void render()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
+
 		//Draw player ship
-		glColor3fv(g.ship.color);
-		glPushMatrix();
-		glTranslatef(g.ship.pos[0], g.ship.pos[1], g.ship.pos[2]);
-		glBegin(GL_QUADS);
-		glVertex2f(-20.0f, -20.0f);
-		glVertex2f(-20.0f, 20.0f);
-		glVertex2f(20.0f, 20.0f);
-		glVertex2f(20.0, -20.0);
-		glEnd();
-		glPopMatrix();
+		renderShip(g.ship);
+		renderShip(eShip);
 
 		for (int i = 0; i < g.nbullets; i++) {
 			Bullet *b = &g.barr[i];

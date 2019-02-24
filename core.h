@@ -56,6 +56,9 @@ class Ship
 		float vel[4];
 		float speed;
 		float color[3];
+		float radius;
+		struct EnemyShip *nextShip;
+		struct EnemyShip *prevShip;
 		int weaponType;
 	public:
 		Ship();
@@ -88,6 +91,7 @@ class Game
 		Missile *marr;
 		int nbullets;
 		int nmissiles;
+		Flt radius;
 		timespec bulletTimer;
 		timespec missileTimer;
 		timespec thrustTimer;
