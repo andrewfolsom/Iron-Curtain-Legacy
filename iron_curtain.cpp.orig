@@ -69,8 +69,15 @@ extern void displayChad(float x, float y, GLuint texture);
 extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
 extern void BenjaminG(float x, float y, GLuint texture);
+<<<<<<< HEAD
+extern double dotProduct(float *a, float *b);
+extern double perpDotProduct(float *a, float *b);
+extern void angularAdjustment(float *vel, float angle);
 extern void tracking(Missile *m, float *target, float t);
+||||||| merged common ancestors
+=======
 extern void renderShip(Ship ship); 
+>>>>>>> 47b1e8922332fea58f3b29d73ff2bfe57601503d
 //-------------------------------------------------------------------------- 
 
 Image img[5] = {
@@ -89,10 +96,14 @@ X11_wrapper x11;
 
 Weapon *wpn = new Basic;
 
+<<<<<<< HEAD
 Weapon *scnd = new Secondary;
 
+||||||| merged common ancestors
+=======
 EnemyShip eShip;
 
+>>>>>>> 47b1e8922332fea58f3b29d73ff2bfe57601503d
 //Function Prototypes
 double getTimeSlice(timespec* bt);
 float convertToRads(float angle);
@@ -269,12 +280,12 @@ void physics()
 		i++;
 	}
 
+<<<<<<< HEAD
 	i = 0;
-	Ship *e = &eShip;
 	while (i < g.nmissiles) {
 		Missile *m = &g.marr[i];
-		d0 = e->pos[0] - m->pos[0];
-		d1 = e->pos[1] - m->pos[1];
+		d0 = test[0] - m->pos[0];
+		d1 = test[1] - m->pos[1];
 		dist = (d0*d0 + d1*d1);
 		if (dist < (radius * radius)) {
 			memcpy(&g.marr[i], &g.marr[g.nmissiles - 1], sizeof(Missile));
@@ -283,13 +294,15 @@ void physics()
 		}
 
 		step += 0.01;
-		tracking(m, e->pos, step);
+		tracking(m, test, step);
 		//
 		if (step > 1.0)
 			step = 0.0;
 		i++;
 	}
 
+||||||| merged common ancestors
+=======
 	//Collision with bullets?
 	//If collision detected:
 	//     1. delete the bullet
@@ -323,7 +336,7 @@ void physics()
 	}
 
 	s = &g.ship;
-
+>>>>>>> 47b1e8922332fea58f3b29d73ff2bfe57601503d
 	if (gl.keys[XK_a]) {
 		s->pos[0] -= s->vel[0];
 		s->vel[0] += s->speed;
