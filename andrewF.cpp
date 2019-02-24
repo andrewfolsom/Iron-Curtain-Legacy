@@ -1,11 +1,17 @@
 #include <GL/glx.h>
+#include <stdio.h>
 #include "andrewF.h"
 #include <cmath>
 #include "fonts.h"
 #include "andrewF.h"
 #include "core.h"
 
-extern const int MAX_BULLETS = 1000;
+#define VecDot(a,b) ((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
+#define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0];(c)[1]=(a)[1]-(b)[1];\
+(c)[2]=(a)[2]-(b)[2]
+
+const int MAX_BULLETS = 1000;
+const int MAX_MISSILES = 1;
 extern float convertToRads(float angle);
 extern double getTimeSlice(timespec*);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
@@ -44,7 +50,60 @@ void displayAndrew(float x, float y, GLuint texture)
 }
 
 //===========================================================
-// DEFINITION OF WEAPON CLASS AND IT'S DERIVED CLASSES
+//                GENERAL UTILITY FUNCTIONS
+//===========================================================
+double dotProduct(float* a, float* b)
+{
+    return (a[0]*b[0]) + (a[1]*b[1]);
+}
+
+double perpDotProduct(float *a, float *b)
+{
+    return (a[0]*b[0]) - (a[0]*b[0]);
+}
+
+float* normalize(float *d)
+{
+    int magnitude = sqrt(pow(d[0], 2.0) + pow(d[1], 2.0));
+    d[0] = d[0] / magnitude;
+    d[1] = d[1] / magnitude;
+    return d;
+}
+
+void angularAdjustment(float *vel, float angle)
+{
+    vel[0] = vel[1] * cos(convertToRads(angle));
+    vel[1] = vel[1] * sin(convertToRads(angle));
+}
+
+// void tracking(float *missile, float *target, float t)
+// {
+//     float mid[3] = {missile[0], target[1], 0.0};
+//     missile[0] = (pow(1 - t, 2.0) * missile[0]) + (2 * (1 - t) * t * mid[0]
+//         ) + (pow(t, 2.0) * target[0]);
+//     missile[1] = (pow(1 - t, 2.0) * missile[1]) + (2 * (1 - t) * t * mid[1]
+//         ) + (pow(t, 2.0) * target[1]);
+// }
+
+void tracking(Missile *m, float *target, float t)
+{
+    float mid[3] = {0.0, 0.0, 0.0};
+    if (m->start[0] < 500.0)
+        mid[1] = m->start[1];
+
+    if (m->start[0] > 500.0) {
+        mid[0] = 900.0;
+        mid[1] = m->start[1];
+    }
+
+    m->pos[0] = (pow(1 - t, 2.0) * m->start[0]) + (2 * (1 - t) * t * mid[0]
+        ) + (pow(t, 2.0) * target[0]);
+    m->pos[1] = (pow(1 - t, 2.0) * m->start[1]) + (2 * (1 - t) * t * mid[1]
+        ) + (pow(t, 2.0) * target[1]);
+}
+
+//===========================================================
+//    DEFINITION OF WEAPON CLASS AND IT'S DERIVED CLASSES
 //===========================================================
 
 /**
@@ -173,3 +232,36 @@ void Scatter::fire()
         }
     }
 }
+
+Secondary::Secondary()
+{
+    fireRate = 1.0;
+    bulletSpeed = 5.0;
+    color[0] = 1.5;
+    color[1] = 0.5;
+    color[2] = 1.0;
+}
+
+void Secondary::setVelocity(float *vel)
+{
+    vel[0] = bulletSpeed;
+    vel[1] = bulletSpeed;
+}
+
+void Secondary::fire()
+{
+    struct timespec bt;
+    if (getTimeSlice(&bt) > fireRate) {
+        timeCopy(&g.missileTimer, &bt);
+        if (g.nmissiles < MAX_MISSILES) {
+            Missile *m = &g.marr[g.nmissiles];
+            timeCopy(&m->time, &bt);
+            setPosition(g.ship.pos, m->pos);
+            setPosition(g.ship.pos, m->start);
+            setColor(m->color);
+            g.nmissiles++;
+        }
+    }
+}
+
+Missile::Missile() { }

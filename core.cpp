@@ -11,11 +11,13 @@
 #include <X11/Xlib.h>
 #include <GL/glx.h>
 #include "core.h"
+#include "andrewF.h"
 
 typedef float Flt;
 typedef float Vec[3];
 
 const int MAX_BULLETS = 1000;
+const int MAX_MISSILES = 1;
 extern Global& gl;
 
 /*
@@ -125,13 +127,17 @@ Game::Game()
 {
 	thrustOn = false;
 	barr = new Bullet[MAX_BULLETS];
+	marr = new Missile[MAX_MISSILES];
 	nbullets = 0;
+	nmissiles = 0;
 	clock_gettime(CLOCK_REALTIME, &bulletTimer);
+	clock_gettime(CLOCK_REALTIME, &missileTimer);
 }
 
 Game::~Game()
 {
 	delete [] barr;
+	delete [] marr;
 }
 
 /*

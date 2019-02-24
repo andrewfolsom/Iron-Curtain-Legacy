@@ -5,6 +5,8 @@
 #ifndef CORE
 #define CORE
 
+#include "andrewF.h"
+
 typedef float Flt;
 typedef float Vec[3];
 
@@ -83,8 +85,11 @@ class Game
 	public:
 		Ship ship;
 		Bullet *barr;
+		Missile *marr;
 		int nbullets;
+		int nmissiles;
 		timespec bulletTimer;
+		timespec missileTimer;
 		timespec thrustTimer;
 		bool thrustOn;
 	public:

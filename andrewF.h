@@ -17,7 +17,7 @@ public:
 	Weapon();
 	virtual ~Weapon();
 	void setPosition(float*, float*);
-	void setVelocity(float*);
+	virtual void setVelocity(float*);
 	void setColor(float*);
 	virtual void fire() =0;
 };
@@ -47,6 +47,25 @@ public:
 	Scatter();
 	void bulletSpread(float*);
 	void fire();
+};
+
+class Secondary : public Basic
+{
+public:
+	Secondary();
+	void setVelocity(float*);
+	void fire();
+};
+
+class Missile
+{
+public:
+	float start[3];
+	float pos[3];
+	float color[3];
+	timespec time;
+public:
+	Missile();
 };
 
 #endif

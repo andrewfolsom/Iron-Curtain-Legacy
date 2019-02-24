@@ -45,8 +45,13 @@ const float gravity = -0.2f;
 #define PI 3.141592653589793
 #define ALPHA 1
 const int MAX_BULLETS = 1000;
+const int MAX_MISSILES = 1;
 const float MAX_VELOCITY = 15;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
+float test[3] = {450.0, 900.0, 0.0};
+float radius = 8.0;
+float step = 0.0;
+float d0, d1, dist;
 
 //-------------------------------------------------------------------------- :                                                                         
 //Setup timers                                                               
@@ -63,6 +68,10 @@ extern void displayChad(float x, float y, GLuint texture);
 extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
 extern void BenjaminG(float x, float y, GLuint texture);
+extern double dotProduct(float *a, float *b);
+extern double perpDotProduct(float *a, float *b);
+extern void angularAdjustment(float *vel, float angle);
+extern void tracking(Missile *m, float *target, float t);
 //-------------------------------------------------------------------------- 
 
 Image img[5] = {
@@ -80,6 +89,8 @@ Game g;
 X11_wrapper x11;
 
 Weapon *wpn = new Basic;
+
+Weapon *scnd = new Secondary;
 
 //Function Prototypes
 double getTimeSlice(timespec* bt);
@@ -183,6 +194,9 @@ int check_keys(XEvent *e)
 				break;
 			case XK_Escape:
 				return 1;
+			case XK_m:
+				gl.keys[XK_m] = 1;
+				break;
 			case XK_1:
 				delete wpn;
 				wpn = new Basic;
@@ -217,6 +231,9 @@ int check_keys(XEvent *e)
 			case XK_space:
 				gl.keys[XK_space] = 0;
 				break;
+			case XK_m:
+				gl.keys[XK_m] = 0;
+				break;
 		}
 	}
 	return 0;
@@ -248,6 +265,26 @@ void physics()
 		}
 		b->pos[0] += b->vel[0];
 		b->pos[1] += b->vel[1];
+		i++;
+	}
+
+	i = 0;
+	while (i < g.nmissiles) {
+		Missile *m = &g.marr[i];
+		d0 = test[0] - m->pos[0];
+		d1 = test[1] - m->pos[1];
+		dist = (d0*d0 + d1*d1);
+		if (dist < (radius * radius)) {
+			memcpy(&g.marr[i], &g.marr[g.nmissiles - 1], sizeof(Missile));
+			g.nmissiles--;
+			continue;
+		}
+
+		step += 0.01;
+		tracking(m, test, step);
+		//
+		if (step > 1.0)
+			step = 0.0;
 		i++;
 	}
 
@@ -308,9 +345,12 @@ void physics()
 		}
 	}
 
-	if (gl.keys[XK_space]) {
+	if (gl.keys[XK_space])
 		wpn->fire();
-	}
+
+	if (gl.keys[XK_m])
+		scnd->fire();
+
 	if (g.thrustOn) {
 		struct timespec mtt;
 		clock_gettime(CLOCK_REALTIME, &mtt);
@@ -402,6 +442,21 @@ void render()
 			glEnd();
 			glPopMatrix();
 		}
+
+		for (int i = 0; i < g.nmissiles; i++) {
+			Missile *m = &g.marr[i];
+			glColor3fv(m->color);
+			glPushMatrix();
+			glTranslatef(m->pos[0], m->pos[1], m->pos[2]);
+			glBegin(GL_QUADS);
+			glVertex2f(-5.0, -5.0);
+			glVertex2f(-5.0, 5.0);
+			glVertex2f(5.0, 5.0);
+			glVertex2f(5.0, -5.0);
+			glEnd();
+			glPopMatrix();
+		}
+
 		glDisable(GL_DEPTH_TEST);
 	}
 }
