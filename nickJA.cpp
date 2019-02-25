@@ -11,7 +11,7 @@
 #include "core.h"
 #include <stdio.h>
 
-//Class Definitions
+extern Game g;
 
 //DISPLAY
 void displayNick(float x, float y, GLuint texture)
@@ -40,30 +40,67 @@ void displayNick(float x, float y, GLuint texture)
 	ggprint16(&r, 16, color, "Nick Jackson");
 }
 //SPAWN
-void spawnOpFor(int x, int y, int movType, opForShip opFor)
+//X & Y are spawn Coordinates
+//movType acts as a flag to define movement behavior.
+void spawnOpFor(int x, int y, int movType) 
 {
-	opFor.pos[0] = x;
-	opFor.pos[1] = y;
-	opFor.movPattern = movType;
+	opForShip *newGuy = &g.opFor[g.numOpFor];
+	newGuy->pos[0] = x;
+	newGuy->pos[1] = y;
+	newGuy->movPattern = movType;
+	g.numOpFor++;
 
-	printf("OpFor created at (%.2f, %.2f) with movePattern = %i\n", opFor.pos[0], opFor.pos[1], opFor.movPattern);
+	printf("OpFor %i created at (%.2f, %.2f) with movePattern = %i\n",g.numOpFor, newGuy->pos[0], newGuy->pos[1], newGuy->movPattern);
 }
-//RENDEROPFOR
 
-void renderOpFor(Game g) {
-	if (g.numOpFor > 0) 
-	{
-		for (int i = 0; i < g.numOpFor; i++) {
-			glColor3fv(g.opFor[i].color);
-			glPushMatrix();
-			glTranslatef(g.opFor[i].pos[0], g.opFor[i].pos[1], g.opFor[i].pos[2]);
-			glBegin(GL_QUADS);
-			glVertex2f(-1.0, -1.0);
-			glVertex2f(-1.0,  1.0);
-			glVertex2f( 1.0,  1.0);
-			glVertex2f( 1.0, -1.0);
-			glEnd();
-			glPopMatrix();
+//RENDEROPFOR
+void renderOpFor() 
+{
+
+	opForShip *draw;;
+
+	for (int i = 0; i < g.numOpFor; i++) {
+		draw = &g.opFor[i];
+		glColor3fv(draw->color);
+		glPushMatrix();
+		glTranslatef(draw->pos[0], draw->pos[1], draw->pos[2]);
+		glBegin(GL_QUADS);
+		glVertex2f(-20.0, -20.0);
+		glVertex2f(-20.0,  20.0);
+		glVertex2f( 20.0,  20.0);
+		glVertex2f( 20.0, -20.0);
+		glEnd();
+		glPopMatrix();
 		}
-	}
+}
+
+//MOVEMENT TYPES
+
+//1 - Rush
+//Enemy begins at the top of the screen and rushes straight to the bottom.
+void upDateRush() 
+{
+
+}
+
+//2 - Strafing
+//Enemy Oscillates between to points while moving to the bottom of the screen.
+void upDateStrafe()
+{
+
+}
+
+//3 - Circling
+//Enemy follows the path of a circle whose center is consistently moving
+//towards the bottom of the screen.
+void upDateCircle() 
+{
+
+}
+
+//4 - Bank
+//Enemy follows a curve while moving from the top to bottom of the screen.
+void upDateBank()
+{
+
 }

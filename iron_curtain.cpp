@@ -64,8 +64,8 @@ extern void BenjaminG(float x, float y, GLuint texture);
 
 //Externs -- Jackson
 extern void displayNick(float x, float y, GLuint texture);
-extern void spawnOpFor(int x, int y, int movType, opForShip opFor);
-extern void renderOpFor(Game g);
+extern void spawnOpFor(int x, int y, int movType);
+extern void renderOpFor();
 //-------------------------------------------------------------------------- 
 
 Image img[5] = {
@@ -109,7 +109,7 @@ int main()
 			physicsCountdown -= physicsRate;
 		}
 		render();
-		//renderOpFor(g);
+		renderOpFor();
 		x11.swapBuffers();
 		x11.clearWindow();
 	}
@@ -186,15 +186,12 @@ int check_keys(XEvent *e)
 			case XK_l:
 				g.ship.weaponType ^= 1;
 				break;
-			case XK_1:
-			{
-				spawnOpFor(gl.xres/2, gl.yres/2, 1, g.opFor[g.numOpFor]);
-				printf("OpFor %i created at (%.2f, %.2f) with movePattern %ii\n",
-						g.numOpFor, g.opFor[g.numOpFor].pos[0],g.opFor[g.numOpFor].pos[1],
-						g.opFor[g.numOpFor].movPattern);
-				g.numOpFor++;
+			case XK_t:
+				spawnOpFor(gl.xres/2, gl.yres/2, 3);
+				spawnOpFor(gl.xres/10, gl.yres/10, 3);
+				spawnOpFor(gl.xres/5, gl.yres/5, 3);
+
 				break;
-			}
 
 		}
 	}
