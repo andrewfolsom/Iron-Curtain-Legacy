@@ -247,6 +247,43 @@ Ring::Ring()
     temp = 0.0;
 };
 
+Pinwheel::Pinwheel()
+{
+    fireRate = 0.6;
+    bulletSpeed = 1.0;
+    color[0] = 0.5;
+    color[1] = 1.0;
+    color[2] = 0.5;
+    shotsFired = 4;
+    spread = 0.0;
+    increment = 2.0;
+}
+
+void Pinwheel::fire()
+{
+    struct timespec bt;
+    if (getTimeSlice(&bt) > fireRate) {
+        timeCopy(&g.bulletTimer, &bt);
+        for (int i = 0; i < shotsFired; i++) {
+            if(g.nbullets < MAX_BULLETS) {
+                Bullet *b = &g.barr[g.nbullets];
+                timeCopy(&b->time, &bt);
+                setPosition(g.ship.pos, b->pos);
+                b->vel[0] = b->vel[1] = bulletSpeed;
+                b->vel[0] *= cos(convertToRads(spread));
+                b->vel[1] *= sin(convertToRads(spread));
+                setColor(b->color);
+                spread += 90.0;
+                g.nbullets++;
+            }
+        }
+    }
+    spread = 0.0 + increment;
+    increment += 2.0;
+    if (increment > 90)
+        increment = 0.0;
+}
+
 Secondary::Secondary()
 {
     fireRate = 1.0;

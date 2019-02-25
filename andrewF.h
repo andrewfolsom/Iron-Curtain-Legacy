@@ -55,6 +55,13 @@ public:
 	Ring();
 };
 
+class Pinwheel : public Scatter
+{
+public:
+	Pinwheel();
+	void fire();
+};
+
 class Secondary : public Basic
 {
 public:

@@ -214,6 +214,10 @@ int check_keys(XEvent *e)
 				delete wpn;
 				wpn = new Ring;
 				break;
+			case XK_5:
+				delete wpn;
+				wpn = new Pinwheel;
+				break;
 		}
 	}
 
@@ -263,7 +267,8 @@ void physics()
 	int i = 0;
 	while (i < g.nbullets) {
 		Bullet *b = &g.barr[i];
-		if (b->pos[1] > gl.yres + 10) {
+		if (b->pos[1] > gl.yres + 10 || b->pos[1] < -10.0 ||
+			b->pos[0] > gl.xres + 10 || b->pos[0] < -10.0) {
 			memcpy(&g.barr[i], &g.barr[g.nbullets - 1], sizeof(Bullet));
 			g.nbullets--;
 			continue;
