@@ -189,7 +189,7 @@ Rapid::Rapid()
 Scatter::Scatter()
 {
     fireRate = 0.5;
-    bulletSpeed = 10;
+    bulletSpeed = 15;
     color[0] = 0.5;
     color[1] = 1.0;
     color[2] = 0.5;
@@ -232,6 +232,20 @@ void Scatter::fire()
         }
     }
 }
+
+Ring::Ring()
+{
+    fireRate = 5.0;
+    bulletSpeed = 2.0;
+    color[0] = 0.5;
+    color[1] = 1.0;
+    color[2] = 0.5;
+    shotsFired = 45;
+    spread = 360.0;
+    start = 90 - (spread / 2);
+    increment = spread / (shotsFired - 1);
+    temp = 0.0;
+};
 
 Secondary::Secondary()
 {

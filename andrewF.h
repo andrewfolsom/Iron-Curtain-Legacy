@@ -49,6 +49,12 @@ public:
 	void fire();
 };
 
+class Ring : public Scatter
+{
+public:
+	Ring();
+};
+
 class Secondary : public Basic
 {
 public:

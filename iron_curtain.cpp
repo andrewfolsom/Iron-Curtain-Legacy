@@ -47,7 +47,7 @@ const float gravity = -0.2f;
 #define ALPHA 1
 const int MAX_BULLETS = 1000;
 const int MAX_MISSILES = 1;
-const float MAX_VELOCITY = 15;
+const float MAX_VELOCITY = 10;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 float test[3] = {450.0, 900.0, 0.0};
 float radius = 8.0;
@@ -209,6 +209,10 @@ int check_keys(XEvent *e)
 			case XK_3:
 				delete wpn;
 				wpn = new Scatter;
+				break;
+			case XK_4:
+				delete wpn;
+				wpn = new Ring;
 				break;
 		}
 	}
