@@ -57,11 +57,15 @@ extern double physicsCountdown;
 extern double timeSpan;                                                      
 extern double timeDiff(struct timespec *start, struct timespec *end);        
 extern void timeCopy(struct timespec *dest, struct timespec *source);        
-extern void displayNick(float x, float y, GLuint texture);
 extern void displayChad(float x, float y, GLuint texture);
 extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
 extern void BenjaminG(float x, float y, GLuint texture);
+
+//Externs -- Jackson
+extern void displayNick(float x, float y, GLuint texture);
+extern void spawnOpFor(int x, int y, int movType, opForShip opFor);
+extern void renderOpFor(Game g);
 //-------------------------------------------------------------------------- 
 
 Image img[5] = {
@@ -105,6 +109,7 @@ int main()
 			physicsCountdown -= physicsRate;
 		}
 		render();
+		//renderOpFor(g);
 		x11.swapBuffers();
 		x11.clearWindow();
 	}
@@ -181,6 +186,16 @@ int check_keys(XEvent *e)
 			case XK_l:
 				g.ship.weaponType ^= 1;
 				break;
+			case XK_1:
+			{
+				spawnOpFor(gl.xres/2, gl.yres/2, 1, g.opFor[g.numOpFor]);
+				printf("OpFor %i created at (%.2f, %.2f) with movePattern %ii\n",
+						g.numOpFor, g.opFor[g.numOpFor].pos[0],g.opFor[g.numOpFor].pos[1],
+						g.opFor[g.numOpFor].movPattern);
+				g.numOpFor++;
+				break;
+			}
+
 		}
 	}
 
@@ -372,7 +387,7 @@ void render()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
-				img[1].data);
+		img[1].data);
 
 		w = img[2].width;
 		h = img[2].height;

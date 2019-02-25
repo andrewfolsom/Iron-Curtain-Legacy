@@ -69,12 +69,14 @@ class opForShip
 		Vec pos;
 		float vel[4];
 		float speed;
-		float color[3];
+		float color[3] = {255.0, 0.0, 0.0};
 		int weaponType;
 		int movPattern;
 		int speedMul = 1;
-	public:
+
 		opForShip();
+		opForShip(const opForShip&);
+		opForShip& operator= (const opForShip&);
 };
 
 /*
