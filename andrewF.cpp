@@ -52,39 +52,26 @@ void displayAndrew(float x, float y, GLuint texture)
 //===========================================================
 //                GENERAL UTILITY FUNCTIONS
 //===========================================================
-double dotProduct(float* a, float* b)
-{
-    return (a[0]*b[0]) + (a[1]*b[1]);
-}
 
-double perpDotProduct(float *a, float *b)
-{
-    return (a[0]*b[0]) - (a[0]*b[0]);
-}
-
-float* normalize(float *d)
-{
-    int magnitude = sqrt(pow(d[0], 2.0) + pow(d[1], 2.0));
-    d[0] = d[0] / magnitude;
-    d[1] = d[1] / magnitude;
-    return d;
-}
-
+/**
+ * Adjusts an objects velocity according to the angle at which
+ * it should travel.
+ * @param vel   Array containing the objects X/Y velocities
+ * @param angle The desired angle of fire
+ */
 void angularAdjustment(float *vel, float angle)
 {
     vel[0] = vel[1] * cos(convertToRads(angle));
     vel[1] = vel[1] * sin(convertToRads(angle));
 }
 
-// void tracking(float *missile, float *target, float t)
-// {
-//     float mid[3] = {missile[0], target[1], 0.0};
-//     missile[0] = (pow(1 - t, 2.0) * missile[0]) + (2 * (1 - t) * t * mid[0]
-//         ) + (pow(t, 2.0) * target[0]);
-//     missile[1] = (pow(1 - t, 2.0) * missile[1]) + (2 * (1 - t) * t * mid[1]
-//         ) + (pow(t, 2.0) * target[1]);
-// }
-
+/**
+ * Updates objects position so that it continually moves towards
+ * the target.
+ * @param m      Missile object to be moved
+ * @param target Array containing targets X/Y coordinates
+ * @param t      Time value for the Bezier curve
+ */
 void tracking(Missile *m, float *target, float t)
 {
     float mid[3] = {0.0, 0.0, 0.0};
@@ -181,11 +168,17 @@ void Basic::fire()
     }
 }
 
+/**
+ * Rapid weapon class constructor
+ */
 Rapid::Rapid()
 {
     fireRate = 0.25;
 }
 
+/**
+ * Scatter weapon class constructor
+ */
 Scatter::Scatter()
 {
     fireRate = 0.5;
@@ -212,6 +205,10 @@ void Scatter::bulletSpread(float *vel)
     vel[1] = vel[1] * sin(convertToRads(temp));
 }
 
+/**
+ * Initializes multiple instances of Bullet objects for
+ * a burst like fire mode.
+ */
 void Scatter::fire()
 {
     temp = start;
@@ -233,6 +230,9 @@ void Scatter::fire()
     }
 }
 
+/**
+ * Ring weapon class constructor
+ */
 Ring::Ring()
 {
     fireRate = 5.0;
@@ -247,6 +247,9 @@ Ring::Ring()
     temp = 0.0;
 };
 
+/**
+ * Pinwheel weapon class constructor
+ */
 Pinwheel::Pinwheel()
 {
     fireRate = 0.6;
@@ -259,6 +262,11 @@ Pinwheel::Pinwheel()
     increment = 2.0;
 }
 
+/**
+ * Generates multiple Bullet objects while constantly
+ * incrementing their angle of fire to create a pinwheel
+ * like effect.
+ */
 void Pinwheel::fire()
 {
     struct timespec bt;
@@ -284,6 +292,9 @@ void Pinwheel::fire()
         increment = 0.0;
 }
 
+/**
+ * Secondary weapon class constructor
+ */
 Secondary::Secondary()
 {
     fireRate = 1.0;
@@ -293,12 +304,22 @@ Secondary::Secondary()
     color[2] = 1.0;
 }
 
+/**
+ * Secondary weapon specific implementation of setVelocity.
+ * Sets both X and Y velocity to bulletSpeed so that they
+ * can be adjusted with trig functions.
+ * @param vel Array containing the objects X/Y velocity
+ */
 void Secondary::setVelocity(float *vel)
 {
     vel[0] = bulletSpeed;
     vel[1] = bulletSpeed;
 }
 
+/**
+ * Generates a Missile object. Special implementation required
+ * to account for tracking starting and ending position.
+ */
 void Secondary::fire()
 {
     struct timespec bt;
@@ -315,4 +336,7 @@ void Secondary::fire()
     }
 }
 
+/**
+ * Missile object constructor
+ */
 Missile::Missile() { }
