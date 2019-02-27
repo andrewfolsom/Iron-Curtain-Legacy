@@ -12,13 +12,13 @@
 #include <stdio.h>
 #include <math.h>
 extern Game g;
-
+extern Global gl;
 //const int RUSH = 0;
 //const int STRAFE = 1;
 //const int CIRCLING = 2;
 //const int BANK = 3;
 
-enum COLOR { RUSH, STRAFE, CIRCLING, BANK };
+enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH};
 
 //DISPLAY
 void displayNick(float x, float y, GLuint texture)
@@ -129,6 +129,20 @@ void updateBank(int iteration)
 	opForShip *move = &g.opFor[iteration];
 }
 
+//5 - Diagonal Rush
+//Enemy will follow a diagonal line from its spawn to the bottom of the screen.
+void updateDiagRush(int iteration)
+{
+	opForShip *move = &g.opFor[iteration];
+
+
+	move->pos[1] -= move->speedMul;
+	move->pos[0] = (move->pos[1]-1000)/-1.13;
+
+	//printf("Opfor %i (%f, %f)\n", g.numOpFor, move->pos[0], move->pos[1]); 
+
+}
+
 //Movement Function
 //Function uses a switch case to determine what function should be applied to
 //each entity in the OpFor array.
@@ -153,6 +167,10 @@ void updatePosition()
 
 			case (BANK):
 				updateBank(i);
+				break;
+
+			case (DIAG_RUSH):
+				updateDiagRush(i);
 				break;
 		}
 	}

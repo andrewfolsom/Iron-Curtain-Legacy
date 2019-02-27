@@ -12,4 +12,6 @@ its path frrom its spawn to the bottom of the screen.
 
 4) BANKING - Enemy follows a smooth curve from their spawn point to either the bottom or edge of the screen.
 
-5) SPECIAL BEHAVIOR - Movement patterns for enemies that will remain on screen until destroyed by the player
+5) DIAG RUSH - Enemy unit rushes from their spawn to the bottom of the screen following a diagonal line.
+
+6) SPECIAL BEHAVIOR - Movement patterns for enemies that will remain on screen until destroyed by the player

@@ -192,6 +192,7 @@ int check_keys(XEvent *e)
 				spawnOpFor(gl.xres/2, gl.yres, 2);
 				spawnOpFor(gl.xres/4, gl.yres, 0);
 				spawnOpFor(gl.xres*.75, gl.yres, 1);
+				spawnOpFor(0, gl.yres, 4);
 
 				break;
 

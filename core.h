@@ -75,6 +75,8 @@ class opForShip
 		int speedMul = 1;
 
 		float angle = 90.0;
+		float slope;
+		Vec spawnPoint;
 		opForShip();
 		opForShip(const opForShip&);
 		opForShip& operator= (const opForShip&);
