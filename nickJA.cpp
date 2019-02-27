@@ -112,6 +112,13 @@ void updateStrafe(int iteration)
 void updateCircle(int iteration) 
 {
 	opForShip *move = &g.opFor[iteration];
+
+	move->pos[0] += 10*cos(move->angle);
+	move->pos[1] += 10*sin(move->angle) - move->speedMul;
+
+
+	move->angle+= 0.1;
+
 }
 
 //4 - Bank

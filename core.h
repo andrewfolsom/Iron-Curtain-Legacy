@@ -110,7 +110,7 @@ class Game
 		bool thrustOn;
 //-----------------------------
 		//Jackson
-		opForShip opFor[20];
+		opForShip opFor[100];
 		int numOpFor;
 //------------------------------
 	public:

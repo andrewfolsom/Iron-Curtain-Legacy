@@ -189,9 +189,9 @@ int check_keys(XEvent *e)
 				g.ship.weaponType ^= 1;
 				break;
 			case XK_t:
-				spawnOpFor(gl.xres/2, gl.yres/2, 1);
-				spawnOpFor(gl.xres/10, gl.yres/10, 0);
-				spawnOpFor(gl.xres/5, gl.yres/5, 0);
+				spawnOpFor(gl.xres/2, gl.yres, 2);
+				spawnOpFor(gl.xres/4, gl.yres, 0);
+				spawnOpFor(gl.xres*.75, gl.yres, 1);
 
 				break;
 
