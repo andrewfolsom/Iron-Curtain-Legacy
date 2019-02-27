@@ -71,9 +71,10 @@ class opForShip
 		float speed;
 		float color[3] = {255.0, 0.0, 0.0};
 		int weaponType;
-		int movPattern;
+		int movPattern = 1;
 		int speedMul = 1;
 
+		int angle = 90;
 		opForShip();
 		opForShip(const opForShip&);
 		opForShip& operator= (const opForShip&);

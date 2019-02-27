@@ -66,6 +66,7 @@ extern void BenjaminG(float x, float y, GLuint texture);
 extern void displayNick(float x, float y, GLuint texture);
 extern void spawnOpFor(int x, int y, int movType);
 extern void renderOpFor();
+extern void updatePosition();
 //-------------------------------------------------------------------------- 
 
 Image img[5] = {
@@ -110,6 +111,7 @@ int main()
 		}
 		render();
 		renderOpFor();
+		updatePosition();
 		x11.swapBuffers();
 		x11.clearWindow();
 	}
@@ -187,9 +189,9 @@ int check_keys(XEvent *e)
 				g.ship.weaponType ^= 1;
 				break;
 			case XK_t:
-				spawnOpFor(gl.xres/2, gl.yres/2, 3);
-				spawnOpFor(gl.xres/10, gl.yres/10, 3);
-				spawnOpFor(gl.xres/5, gl.yres/5, 3);
+				spawnOpFor(gl.xres/2, gl.yres/2, 1);
+				spawnOpFor(gl.xres/10, gl.yres/10, 0);
+				spawnOpFor(gl.xres/5, gl.yres/5, 0);
 
 				break;
 

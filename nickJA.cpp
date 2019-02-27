@@ -10,7 +10,7 @@
 #include "fonts.h"
 #include "core.h"
 #include <stdio.h>
-
+#include <math.h>
 extern Game g;
 
 //const int RUSH = 0;
@@ -74,7 +74,7 @@ void renderOpFor()
 		glTranslatef(draw->pos[0], draw->pos[1], draw->pos[2]);
 		glBegin(GL_QUADS);
 		glVertex2f(-20.0, -20.0);
-		glVertex2f(-20.0, ` 20.0);
+		glVertex2f(-20.0,  20.0);
 		glVertex2f( 20.0,  20.0);
 		glVertex2f( 20.0, -20.0);
 		glEnd();
@@ -89,7 +89,8 @@ void renderOpFor()
 //Iteration will be used to identify which entity to update the position of.
 void updateRush(int iteration)
 {
-	opForShip *move;
+	opForShip *move = &g.opFor[iteration];
+	move->pos[1] -= move->speedMul;
 }
 
 //2 - Strafing
@@ -97,7 +98,11 @@ void updateRush(int iteration)
 //Iteration will be used to identify which entity to update the position of.
 void updateStrafe(int iteration)
 {
-	opForShip *move;
+	opForShip *move = &g.opFor[iteration];
+	move->pos[1] -= move->speedMul;
+
+	move->pos[0] += 100*cos(move->angle);
+	move->angle++;
 }
 
 //3 - Circling
@@ -106,7 +111,7 @@ void updateStrafe(int iteration)
 //Iteration will be used to identify which entity to update the position of.
 void updateCircle(int iteration) 
 {
-	opForShip *move;
+	opForShip *move = &g.opFor[iteration];
 }
 
 //4 - Bank
@@ -114,7 +119,7 @@ void updateCircle(int iteration)
 //Iteration will be used to identify which entity to update the position of.
 void updateBank(int iteration)
 {
-	opForShip *move;
+	opForShip *move = &g.opFor[iteration];
 }
 
 //Movement Function
@@ -122,26 +127,26 @@ void updateBank(int iteration)
 //each entity in the OpFor array.
 void updatePosition()
 {
-	for (int i = 0; i < g.numOpFor; i++) {
+	for (int i = 0; i <= g.numOpFor; i++) {
 		opForShip *target = &g.opFor[i];
 		
 		switch (target->movPattern) {
 
 			case (RUSH):
-				updateRush(target->movPattern);
-			break;
+				updateRush(i);
+				break;
 
 			case (STRAFE):
-				updateStrafe(target->movPattern);
-			break;
+				updateStrafe(i);
+				break;
 
 			case (CIRCLING):
-				updateCircle(target->movType);
-			break;
+				updateCircle(i);
+				break;
 
 			case (BANK):
-				updateBank(target->movType);
-			break;
+				updateBank(i);
+				break;
 		}
 	}
 }
