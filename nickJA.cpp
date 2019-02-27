@@ -94,7 +94,7 @@ void updateRush(int iteration)
 }
 
 //2 - Strafing
-//Enemy Oscillates between to points while moving to the bottom of the screen.
+//Enemy Oscillates between two points while moving to the bottom of the screen.
 //Iteration will be used to identify which entity to update the position of.
 void updateStrafe(int iteration)
 {
