@@ -33,11 +33,14 @@ class Global
 		int xres, yres;
 		char keys[65536];
 		bool creditPage = false;
+        bool startMenu = true;
+        bool gamePlay = false;
 		GLuint nickImage;
 		GLuint andrewImage;
 		GLuint spencerImage;
 		GLuint chadImage;
 		GLuint benImg;
+        GLuint ironImage;
 		static Global& getInstance();
 	private:
 		Global();

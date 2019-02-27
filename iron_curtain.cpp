@@ -70,15 +70,17 @@ extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
 extern void BenjaminG(float x, float y, GLuint texture);
 extern void tracking(Missile *m, float *target, float t);
-extern void renderShip(Ship ship); 
+extern void renderShip(Ship ship);
+extern void displayStartScreen();
 //-------------------------------------------------------------------------- 
 
-Image img[5] = {
+Image img[6] = {
 	"./img/NICKJA.jpg",
 	"./img/andrewimg.png",
 	"./img/spencerA.jpg",
 	"./img/chad-egg.jpg",
-	"./img/BGarza.jpg"
+	"./img/BGarza.jpg",
+    "./img/ironImage.jpg"
 };
 
 Global& gl = Global::getInstance();
@@ -148,6 +150,10 @@ void init_opengl(void)
 	glGenTextures(1, &gl.chadImage);
 	glGenTextures(1, &gl.benImg);
 
+    glBindTexture(GL_TEXTURE_2D, gl.ironImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3,img[5].width,img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
 
 	//Clear the screen to black
 	glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -187,14 +193,28 @@ int check_keys(XEvent *e)
 			case XK_s:
 				gl.keys[XK_s] = 1;
 				break;
+
+			case XK_g:
+				gl.startMenu = 1;
+				gl.gamePlay = 0;
+                gl.creditPage =0;
+                break;
 			case XK_space:
 				gl.keys[XK_space] = 1;
 				break;
 			case XK_c : 
 				gl.creditPage ^= 1;
+                gl.startMenu = 0;
+                gl.gamePlay = 0;
 				break;
 			case XK_Escape:
 				return 1;
+
+			case XK_p:
+				gl.gamePlay ^= 1;
+                gl.startMenu =0;
+                gl.creditPage=0;
+				break;
 			case XK_m:
 				gl.keys[XK_m] = 1;
 				break;
@@ -409,7 +429,7 @@ void physics()
 void render()
 {
 	//If 'c' was pressed then render credit screen
-	if(gl.creditPage) { 
+    if (gl.creditPage) {  
 
 		int w = img[0].width;
 		int h = img[0].height;
@@ -458,9 +478,16 @@ void render()
 		displayAndrew(gl.xres/4, gl.yres/4, gl.andrewImage);
 		displayChad( 700, gl.yres/2 + 250, gl.chadImage); 
 		BenjaminG(gl.xres/4, 3*gl.yres/4, gl.benImg);
-	} else {
+	
+  } 
+   
+  if (gl.startMenu) {
+       displayStartScreen();  
+  } 
+  
+  if (gl.gamePlay) {
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
 		//Draw player ship
