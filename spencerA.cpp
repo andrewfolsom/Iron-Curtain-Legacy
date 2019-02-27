@@ -52,9 +52,10 @@ void displayStartScreen()
     r.bot = gl.yres - 20;
     r.left = 10;
     r.center = 0;
-    ggprint16(&r, 16,c,"P - Play Game");
     ggprint16(&r, 16,c," ");
     ggprint16(&r, 16,c, "C - Credits Screen");
     ggprint16(&r, 16,c," ");
     ggprint16(&r, 16,c,"G/g - Return to Main Screen");
+    ggprint16(&r, 16,c," ");
+    ggprint16(&r, 16,c,"P - Play Game");
 }                                  
