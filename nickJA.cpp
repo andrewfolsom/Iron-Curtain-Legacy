@@ -101,8 +101,8 @@ void updateStrafe(int iteration)
 	opForShip *move = &g.opFor[iteration];
 	move->pos[1] -= move->speedMul;
 
-	move->pos[0] += 100*cos(move->angle);
-	move->angle++;
+	move->pos[0] += 10*cos(move->angle);
+	move->angle+= 0.1;
 }
 
 //3 - Circling

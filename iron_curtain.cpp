@@ -107,11 +107,11 @@ int main()
 		physicsCountdown += timeSpan;
 		while (physicsCountdown >= physicsRate) {
 			physics();
+			updatePosition();
 			physicsCountdown -= physicsRate;
 		}
 		render();
 		renderOpFor();
-		updatePosition();
 		x11.swapBuffers();
 		x11.clearWindow();
 	}

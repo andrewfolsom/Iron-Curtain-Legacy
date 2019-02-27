@@ -74,7 +74,7 @@ class opForShip
 		int movPattern = 1;
 		int speedMul = 1;
 
-		int angle = 90;
+		float angle = 90.0;
 		opForShip();
 		opForShip(const opForShip&);
 		opForShip& operator= (const opForShip&);
