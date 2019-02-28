@@ -102,6 +102,10 @@ Weapon *scnd = new Secondary;
 
 EnemyShip eShip;
 
+//TEMP VAR
+int hideShip = 0;
+//
+
 //Function Prototypes
 double getTimeSlice(timespec* bt);
 float convertToRads(float angle);
@@ -299,6 +303,26 @@ void physics()
 		s->pos[1] = gl.yres - 20.0;
 	}
 
+	EnemyShip *e = &eShip;
+	if (e->pos[0] < 20.0) {
+		e->pos[0] = 20.0;
+		e->vel[3] = e->vel[0];
+		e->vel[0] = 0.0;
+	} else if (e->pos[0] > gl.xres - 20.0) {
+		e->pos[0] = gl.xres - 20;
+		e->vel[0] = e->vel[3];
+		e->vel[3] = 0.0;
+	} else if (e->pos[1] < 20.0) {
+		e->pos[1] = 20.0;
+	} else if (e->pos[1] > gl.yres - 20.0) {
+		e->pos[1] = gl.yres - 20.0;
+	}
+
+	//Temp function to move enemy ship
+	e->pos[0] -= e->vel[0];
+	e->pos[0] += e->vel[3];
+	//
+
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
 	int i = 0;
@@ -316,7 +340,7 @@ void physics()
 	}
 
 	i = 0;
-	Ship *e = &eShip;
+	e = &eShip;
 	while (i < g.nmissiles) {
 		Missile *m = &g.marr[i];
 		d0 = e->pos[0] - m->pos[0];
@@ -340,32 +364,30 @@ void physics()
 	//If collision detected:
 	//     1. delete the bullet
 	//     2. delete the ship 
-	// TODO : FINISH FUNCTION --CHAD
-	s = &eShip;
-	while (s != NULL) {
+	e = &eShip;
+	while (e != NULL) {
 		//is there a bullet within its radius?
 		int i=0;
 		while (i < g.nbullets) {
 			Bullet *b = &g.barr[i];
-			Flt d0 = b->pos[0] - s->pos[0];
-			Flt d1 = b->pos[1] - s->pos[1];
+			Flt d0 = b->pos[0] - e->pos[0];
+			Flt d1 = b->pos[1] - e->pos[1];
 			Flt dist = (d0*d0 + d1*d1);
-			if (dist < (s->radius*s->radius)) {
+			if (dist < (e->radius*e->radius)) {
 				//delete the ship
-				//memcpy(s[i], s[s.armadaSize()-1], sizeof(Ship));
-				//s.decreaseArmada()
+				e->decreaseArmada();
 				//delete the bullet...
-				//memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
+				memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
 				g.nbullets--;
-				if (s == NULL)
+				if (e == NULL)
 					break;
 			}
 
 			i++;
 		}
-		if (s == NULL)
+		if (e == NULL)
 			break;
-		s = s->nextShip;
+		e = e->nextShip;
 	}
 
 	s = &g.ship;
@@ -507,9 +529,18 @@ void render()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-		//Draw player ship
+		//Draw ships
 		renderShip(g.ship);
-		renderShip(eShip);
+		if (eShip.getArmadaSize() > 0) {
+			renderShip(eShip);
+			hideShip = 0;
+		} else {
+			++hideShip;
+		}
+		if (hideShip > 500) {
+			eShip.increaseArmada();
+			hideShip = 0;
+		}
 
 		for (int i = 0; i < g.nbullets; i++) {
 			Bullet *b = &g.barr[i];

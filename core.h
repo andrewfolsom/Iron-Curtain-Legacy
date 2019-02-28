@@ -60,8 +60,6 @@ class Ship
 		float speed;
 		float color[3];
 		float radius;
-		struct EnemyShip *nextShip;
-		struct EnemyShip *prevShip;
 		int weaponType;
 	public:
 		Ship();

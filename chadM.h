@@ -2,7 +2,12 @@ class EnemyShip : public Ship
 {
 	public :
 		EnemyShip();
-		int armadaSize();
+		~EnemyShip();
+		int getArmadaSize();
+		void increaseArmada();
+		void decreaseArmada();
+		EnemyShip *nextShip;
+		EnemyShip *prevShip;
 	private :
 		int health;
 		int numberOfEnemies;

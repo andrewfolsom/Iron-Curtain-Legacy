@@ -36,15 +36,39 @@ EnemyShip::EnemyShip()
 {
 	int health = 100;
     pos[0] = 100;
-	pos[1] = 950;
+	pos[1] = 900;
 	pos[2] = 1;
+    vel[3] = 5.0f;
 	color[0] = color[1] = color[2] = 0.35;
-	numberOfEnemies = 0;
+	numberOfEnemies = 1;
+    nextShip = prevShip = NULL;
+
 }
 
-int EnemyShip::armadaSize() 
+EnemyShip::~EnemyShip()
+{
+    /*
+    if (this->prevShip != NULL) {
+        this->prevShip->nextShip = this->nextShip;
+    }
+    if (this->nextShip != NULL) {
+        this->nextShip->prevShip = this->prevShip;
+    }*/
+}
+
+int EnemyShip::getArmadaSize() 
 {
 	return numberOfEnemies;
+}
+
+void EnemyShip::increaseArmada()
+{
+    ++numberOfEnemies;
+}
+
+void EnemyShip::decreaseArmada()
+{
+    --numberOfEnemies;
 }
 
 void renderShip(Ship ship)
