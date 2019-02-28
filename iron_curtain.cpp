@@ -375,7 +375,7 @@ void physics()
 			Flt dist = (d0*d0 + d1*d1);
 			if (dist < (e->radius*e->radius)) {
 				//delete the ship
-				e->decreaseArmada();
+				++hideShip;
 				//delete the bullet...
 				memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
 				g.nbullets--;
@@ -531,14 +531,12 @@ void render()
 
 		//Draw ships
 		renderShip(g.ship);
-		if (eShip.getArmadaSize() > 0) {
+		if (hideShip == 0) {
 			renderShip(eShip);
-			hideShip = 0;
 		} else {
 			++hideShip;
 		}
-		if (hideShip > 500) {
-			eShip.increaseArmada();
+		if (hideShip > 100) {
 			hideShip = 0;
 		}
 
