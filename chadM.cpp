@@ -35,8 +35,9 @@ void displayChad (float x , float y, GLuint textid) {
 EnemyShip::EnemyShip()
 {
 	int health = 100;
-	pos[0] = pos[1] = 500;
-	pos[2] = 0;
+    pos[0] = 100;
+	pos[1] = 950;
+	pos[2] = 1;
 	color[0] = color[1] = color[2] = 0.35;
 	numberOfEnemies = 0;
 }

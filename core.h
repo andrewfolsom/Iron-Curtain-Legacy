@@ -68,6 +68,29 @@ class Ship
 };
 
 /*
+ *OPFOR Class
+ *	Jackson
+ */
+class opForShip
+{
+	public:
+		Vec pos;
+		float vel[4];
+		float speed;
+		float color[3] = {255.0, 0.0, 0.0};
+		int weaponType;
+		int movPattern = 1;
+		int speedMul = 1;
+
+		float angle = 90.0;
+		float slope;
+		Vec spawnPoint;
+		opForShip();
+		opForShip(const opForShip&);
+		opForShip& operator= (const opForShip&);
+};
+
+/*
  * Bullet Class
  */
 
@@ -99,6 +122,11 @@ class Game
 		timespec missileTimer;
 		timespec thrustTimer;
 		bool thrustOn;
+//-----------------------------
+		//Jackson
+		opForShip opFor[100];
+		int numOpFor;
+//------------------------------
 	public:
 		Game();
 		~Game();

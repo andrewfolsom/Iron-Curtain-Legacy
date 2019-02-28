@@ -47,7 +47,7 @@ const float gravity = -0.2f;
 #define ALPHA 1
 const int MAX_BULLETS = 1000;
 const int MAX_MISSILES = 1;
-const float MAX_VELOCITY = 10;
+const float MAX_VELOCITY = 15;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 float test[3] = {450.0, 900.0, 0.0};
 float radius = 8.0;
@@ -72,6 +72,13 @@ extern void BenjaminG(float x, float y, GLuint texture);
 extern void tracking(Missile *m, float *target, float t);
 extern void renderShip(Ship ship);
 extern void displayStartScreen();
+
+//Externs -- Jackson
+extern void displayNick(float x, float y, GLuint texture);
+extern void spawnOpFor(int x, int y, int movType);
+extern void renderOpFor();
+extern void updatePosition();
+
 //-------------------------------------------------------------------------- 
 
 Image img[6] = {
@@ -121,9 +128,11 @@ int main()
 		physicsCountdown += timeSpan;
 		while (physicsCountdown >= physicsRate) {
 			physics();
+			updatePosition();
 			physicsCountdown -= physicsRate;
 		}
 		render();
+		renderOpFor();
 		x11.swapBuffers();
 		x11.clearWindow();
 	}
@@ -238,6 +247,14 @@ int check_keys(XEvent *e)
 				delete wpn;
 				wpn = new Pinwheel;
 				break;
+			case XK_t:
+				spawnOpFor(gl.xres/2, gl.yres, 2);
+				spawnOpFor(gl.xres/4, gl.yres, 0);
+				spawnOpFor(gl.xres*.75, gl.yres, 1);
+				spawnOpFor(0, gl.yres, 4);
+
+				break;
+
 		}
 	}
 
@@ -445,7 +462,7 @@ void render()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
-				img[1].data);
+		img[1].data);
 
 		w = img[2].width;
 		h = img[2].height;

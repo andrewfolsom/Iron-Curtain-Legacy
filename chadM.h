@@ -7,3 +7,11 @@ class EnemyShip : public Ship
 		int health;
 		int numberOfEnemies;
 };
+
+class Grunt : protected EnemyShip
+{
+	public:
+		Grunt();
+	private:
+		int health;
+};
