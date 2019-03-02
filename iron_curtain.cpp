@@ -67,6 +67,7 @@ extern void displayNick(float x, float y, GLuint texture);
 extern void spawnOpFor(int x, int y, int movType);
 extern void renderOpFor();
 extern void updatePosition();
+extern void configOpFor(int ID, int destOffSet);
 //-------------------------------------------------------------------------- 
 
 Image img[5] = {
@@ -193,6 +194,11 @@ int check_keys(XEvent *e)
 				spawnOpFor(gl.xres/4, gl.yres, 0);
 				spawnOpFor(gl.xres*.75, gl.yres, 1);
 				spawnOpFor(0, gl.yres, 4);
+				spawnOpFor(gl.xres/2, gl.yres, 3);
+				configOpFor(g.numOpFor, 700);
+				spawnOpFor(gl.xres/2, gl.yres, 3);
+				configOpFor(g.numOpFor, 0);
+
 
 				break;
 

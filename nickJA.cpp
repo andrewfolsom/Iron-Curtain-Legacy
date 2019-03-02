@@ -52,8 +52,10 @@ void displayNick(float x, float y, GLuint texture)
 void spawnOpFor(int x, int y, int movType) 
 {
 	opForShip *newGuy = &g.opFor[g.numOpFor];
-	newGuy->pos[0] = x;
+	newGuy->pos[0]= x;
 	newGuy->pos[1] = y;
+	newGuy->spawnPos[0]= x;
+	newGuy->spawnPos[1] = y;
 	newGuy->movPattern = movType;
 	g.numOpFor++;
 
@@ -80,6 +82,14 @@ void renderOpFor()
 		glEnd();
 		glPopMatrix();
 		}
+}
+
+void configOpFor(int ID, int destOffset) 
+{
+	opForShip *Edit = &g.opFor[ID];
+
+	Edit->destOffset = destOffset;
+
 }
 
 //MOVEMENT TYPES
@@ -127,6 +137,27 @@ void updateCircle(int iteration)
 void updateBank(int iteration)
 {
 	opForShip *move = &g.opFor[iteration];
+
+	//printf("Opfor %i spawned at (%f, %f)\n", g.numOpFor, move->spawnPos[0], move->spawnPos[1]);
+	//printf("Opfor %i Before update at (%f, %f)\n", g.numOpFor, move->pos[0], move->pos[1]);
+
+	float midPoint[2] = {0.0, 0.0};
+	
+	if (move->destOffset < 450)
+		midPoint[0] = 900.0;
+
+	midPoint[1] = move->spawnPos[1];
+
+	move->pos[0] = (pow(1-move->t, 2.0) * move->spawnPos[0]) + (2*(1-move->t)*move->t*midPoint[0]) + 
+					(pow(move->t, 2.0) * move->destOffset);
+	move->pos[1] = (pow(1-move->t, 2.0) * move->spawnPos[1]) + (2*(1-move->t)*move->t*midPoint[1]) + 
+					(pow(move->t, 2.0) * (0));
+	move->t += 0.006;
+
+	if (move->t > 1.0)
+		move->t = 0;
+
+	//printf("Opfor %i at (%f, %f)\n", g.numOpFor, move->pos[0], move->pos[1]);
 }
 
 //5 - Diagonal Rush
@@ -148,6 +179,7 @@ void updateDiagRush(int iteration)
 //each entity in the OpFor array.
 void updatePosition()
 {
+
 	for (int i = 0; i <= g.numOpFor; i++) {
 		opForShip *target = &g.opFor[i];
 		
@@ -174,4 +206,5 @@ void updatePosition()
 				break;
 		}
 	}
+
 }
