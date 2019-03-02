@@ -136,7 +136,6 @@ int main()
 			physicsCountdown -= physicsRate;
 		}
 		render();
-		renderOpFor();
 		x11.swapBuffers();
 		x11.clearWindow();
 	}
@@ -544,6 +543,9 @@ void render()
 		if (hideShip > 100) {
 			hideShip = 0;
 		}
+
+		//Draw enemy ships
+		renderOpFor();
 
 		for (int i = 0; i < g.nbullets; i++) {
 			Bullet *b = &g.barr[i];

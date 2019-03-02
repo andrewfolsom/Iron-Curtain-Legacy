@@ -93,7 +93,7 @@ void configOpFor(int ID, int destOffset)
 }
 
 //MOVEMENT TYPES
-
+//Press 't' to test this mid game.
 //1 - Rush
 //Enemy begins at the top of the screen and rushes straight to the bottom.
 //Iteration will be used to identify which entity to update the position of.

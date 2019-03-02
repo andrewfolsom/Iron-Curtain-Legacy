@@ -122,13 +122,13 @@ Ship::Ship() {
 opForShip::opForShip() {
 
 }
-
+/*
 opForShip::opForShip(const opForShip& target) {
 	memcpy(pos, target.pos, 3);
 	memcpy(vel, target.vel, 4);
 	memcpy(color, target.color, 3);
 }
-
+*/
 /*
  * Bullet Class
  */
