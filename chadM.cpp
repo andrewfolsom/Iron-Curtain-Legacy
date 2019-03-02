@@ -1,6 +1,10 @@
-#include <X11/Xlib.h>
 #include <GL/glx.h>
+#include <X11/Xlib.h>
+#include "core.h"
+#include "chadM.h"
 #include "fonts.h"
+
+extern Global& gl;
 
 void displayChad (float x , float y, GLuint textid) {
     float wid = 100.0;
@@ -26,4 +30,57 @@ void displayChad (float x , float y, GLuint textid) {
     r.bot = y - 125;
 
     ggprint16(&r, 16, color, "Chad Manning");
+}
+
+EnemyShip::EnemyShip()
+{
+	int health = 100;
+    pos[0] = 100;
+	pos[1] = 900;
+	pos[2] = 1;
+    vel[3] = 5.0f;
+	color[0] = color[1] = color[2] = 0.35;
+	numberOfEnemies = 1;
+    nextShip = prevShip = NULL;
+
+}
+
+EnemyShip::~EnemyShip()
+{
+    /*
+    if (this->prevShip != NULL) {
+        this->prevShip->nextShip = this->nextShip;
+    }
+    if (this->nextShip != NULL) {
+        this->nextShip->prevShip = this->prevShip;
+    }*/
+}
+
+int EnemyShip::getArmadaSize() 
+{
+	return numberOfEnemies;
+}
+
+void EnemyShip::increaseArmada()
+{
+    ++numberOfEnemies;
+}
+
+void EnemyShip::decreaseArmada()
+{
+    --numberOfEnemies;
+}
+
+void renderShip(Ship ship)
+{
+	glColor3fv(ship.color);
+	glPushMatrix();
+	glTranslatef(ship.pos[0], ship.pos[1], ship.pos[2]);
+	glBegin(GL_QUADS);
+	glVertex2f(-20.0f, -20.0f);
+	glVertex2f(-20.0f, 20.0f);
+	glVertex2f(20.0f, 20.0f);
+	glVertex2f(20.0, -20.0);
+	glEnd();
+	glPopMatrix();
 }

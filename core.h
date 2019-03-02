@@ -5,6 +5,8 @@
 #ifndef CORE
 #define CORE
 
+#include "andrewF.h"
+
 typedef float Flt;
 typedef float Vec[3];
 
@@ -31,11 +33,14 @@ class Global
 		int xres, yres;
 		char keys[65536];
 		bool creditPage = false;
+        bool startMenu = true;
+        bool gamePlay = false;
 		GLuint nickImage;
 		GLuint andrewImage;
 		GLuint spencerImage;
 		GLuint chadImage;
 		GLuint benImg;
+        GLuint ironImage;
 		static Global& getInstance();
 	private:
 		Global();
@@ -54,6 +59,7 @@ class Ship
 		float vel[4];
 		float speed;
 		float color[3];
+		float radius;
 		int weaponType;
 	public:
 		Ship();
@@ -109,8 +115,12 @@ class Game
 	public:
 		Ship ship;
 		Bullet *barr;
+		Missile *marr;
 		int nbullets;
+		int nmissiles;
+		Flt radius;
 		timespec bulletTimer;
+		timespec missileTimer;
 		timespec thrustTimer;
 		bool thrustOn;
 //-----------------------------

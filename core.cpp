@@ -11,11 +11,14 @@
 #include <X11/Xlib.h>
 #include <GL/glx.h>
 #include "core.h"
+#include "andrewF.h"
+#include "chadM.h"
 
 typedef float Flt;
 typedef float Vec[3];
 
 const int MAX_BULLETS = 1000;
+const int MAX_MISSILES = 1;
 extern Global& gl;
 
 /*
@@ -100,12 +103,13 @@ Global& Global::getInstance()
 Ship::Ship() {
 	pos[0] = (Flt)(gl.xres/2);
 	pos[1] = (Flt)(100);
-	pos[2] = 0.0f;
+	pos[2] = 1.0f;
 	//VecZero(vel);
 	vel[0] = (Flt)(0);
 	vel[1] = (Flt)(0);
 	vel[2] = (Flt)(0);
 	vel[3] = (Flt)(0);
+	radius = 25.0;
 	speed = 0.4;
 	color[0] = color[1] = color[2] = 1.0;
 	weaponType = 0;
@@ -139,13 +143,17 @@ Game::Game()
 {
 	thrustOn = false;
 	barr = new Bullet[MAX_BULLETS];
+	marr = new Missile[MAX_MISSILES];
 	nbullets = 0;
+	nmissiles = 0;
 	clock_gettime(CLOCK_REALTIME, &bulletTimer);
+	clock_gettime(CLOCK_REALTIME, &missileTimer);
 }
 
 Game::~Game()
 {
 	delete [] barr;
+	delete [] marr;
 }
 
 /*
