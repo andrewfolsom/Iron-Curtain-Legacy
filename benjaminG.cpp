@@ -3,8 +3,6 @@
  * Course:	CMPS 3350: Software Engineering
  * Assignment:	Lab 4 - Group Project Setup
  * Date:	February 14, 2019
- * Purpose:	Provide a function that will be called from the main
- * 		function of our game to display my name and a picture.
  */
 
 #include <iostream>
@@ -14,7 +12,10 @@
 
 using namespace std;
 
-void BenjaminG(float x, float y, GLuint texture) {
+/* A function that will be called from the main
+ * function of our game to display my name and a picture. 
+ */
+void displayBenjamin(float x, float y, GLuint texture) {
     Rect r;
     //glClear(GL_COLOR_BUFFER_BIT);
     r.width = 250.0;
