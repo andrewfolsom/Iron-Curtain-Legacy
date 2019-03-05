@@ -54,7 +54,7 @@ float radius = 8.0;
 float step = 0.0;
 float d0, d1, dist;
 
-//-------------------------------------------------------------------------- :                                                                         
+//--------------------------------------------------------------------------                                                                  
 //Setup timers                                                               
 const double physicsRate = 1.0 / 60.0;                                       
 const double oobillion = 1.0 / 1e9;                                          
@@ -68,10 +68,14 @@ extern void displayNick(float x, float y, GLuint texture);
 extern void displayChad(float x, float y, GLuint texture);
 extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
-extern void displayBenjamin(float x, float y, GLuint texture);
 extern void tracking(Missile *m, float *target, float t);
 extern void renderShip(Ship ship);
 extern void displayStartScreen();
+
+//Externs -- Benjamin
+extern void displayBenjamin(float x, float y, GLuint texture);
+extern void displayGameIntro();
+
 
 //Externs -- Jackson
 extern void displayNick(float x, float y, GLuint texture);
@@ -79,6 +83,8 @@ extern void spawnOpFor(int x, int y, int movType);
 extern void renderOpFor();
 extern void updatePosition();
 extern void configOpFor(int ID, int destOffSet);
+
+
 //-------------------------------------------------------------------------- 
 
 Image img[6] = {
@@ -207,25 +213,19 @@ int check_keys(XEvent *e)
 		break;
 
 	    case XK_g:
-		gl.startMenu = 1;
-		gl.gamePlay = 0;
-		gl.creditPage =0;
+		gl.gameState = 0;
 		break;
 	    case XK_space:
 		gl.keys[XK_space] = 1;
 		break;
 	    case XK_c : 
-		gl.creditPage ^= 1;
-		gl.startMenu = 0;
-		gl.gamePlay = 0;
+		gl.gameState = 2;
 		break;
 	    case XK_Escape:
 		return 1;
 
 	    case XK_p:
-		gl.gamePlay ^= 1;
-		gl.startMenu =0;
-		gl.creditPage=0;
+		gl.gameState = 1;
 		break;
 	    case XK_m:
 		gl.keys[XK_m] = 1;
@@ -471,17 +471,16 @@ void physics()
 
 void render()
 {
-    //If 'c' was pressed then render credit screen
-    if (gl.creditPage) {  
-
+    if (gl.gameState == 0) 
+	displayGameIntro();
+    else if (gl.gameState == 2) {
+	//If 'c' was pressed then render credit screen
 	int w = img[0].width;
 	int h = img[0].height;
-
 	glBindTexture(GL_TEXTURE_2D, gl.nickImage);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
-
 	w = img[1].width;
 	h = img[1].height;
 	glBindTexture(GL_TEXTURE_2D, gl.andrewImage);
@@ -489,14 +488,12 @@ void render()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
 		img[1].data);
-
 	w = img[2].width;
 	h = img[2].height;
 	glBindTexture(GL_TEXTURE_2D, gl.spencerImage);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
-
 	w = img[3].width;
 	h = img[3].height;
 	glBindTexture(GL_TEXTURE_2D, gl.chadImage);
@@ -504,35 +501,22 @@ void render()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
 	initialize_fonts();
-
 	w = img[4].width;
 	h = img[4].height;
 	glBindTexture(GL_TEXTURE_2D, gl.benImg);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
-
-
 	glClear(GL_COLOR_BUFFER_BIT);
-
-
 	displaySpencer( 700  , 250, gl.spencerImage); 
 	displayNick(gl.xres/2, gl.yres/2, gl.nickImage);
 	displayAndrew(gl.xres/4, gl.yres/4, gl.andrewImage);
 	displayChad( 700, gl.yres/2 + 250, gl.chadImage); 
 	displayBenjamin(gl.xres/4, 3*gl.yres/4, gl.benImg);
-
-    } 
-
-    if (gl.startMenu) {
-	displayStartScreen();  
-    } 
-
-    if (gl.gamePlay) {
-
+    }
+    else if (gl.gameState == 1) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-
 	//Draw ships
 	renderShip(g.ship);
 	if (hideShip == 0) {
@@ -543,10 +527,8 @@ void render()
 	if (hideShip > 100) {
 	    hideShip = 0;
 	}
-
 	//Draw enemy ships
 	renderOpFor();
-
 	for (int i = 0; i < g.nbullets; i++) {
 	    Bullet *b = &g.barr[i];
 	    glColor3fv(b->color);
@@ -560,7 +542,6 @@ void render()
 	    glEnd();
 	    glPopMatrix();
 	}
-
 	for (int i = 0; i < g.nmissiles; i++) {
 	    Missile *m = &g.marr[i];
 	    glColor3fv(m->color);
@@ -574,9 +555,11 @@ void render()
 	    glEnd();
 	    glPopMatrix();
 	}
-
 	glDisable(GL_DEPTH_TEST);
-    }
+    }    
+    else
+	gl.gameState = 0;
+
 }
 
 // Utility Functions
