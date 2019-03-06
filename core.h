@@ -79,13 +79,13 @@ class opForShip
 		int weaponType;
 		int movPattern = 1;
 		int speedMul = 1;
-
+		//Currently needed for movement
 		float angle = 90.0;
 		float slope;
 		float t = 0.0;
 		Vec spawnPos;
 		int destOffset = 0.0;
-		
+		//
 		opForShip();
 		opForShip(const opForShip&);
 		opForShip& operator= (const opForShip&);
