@@ -82,10 +82,17 @@ Image::~Image()
 /*
  * Global Class
  */
+Texture::Texture()
+{
+   float xc[2];
+   float yc[2]; 
+}    
+
 
 Global::Global()
 {
-	xres = 900;
+	
+    xres = 900;
 	yres = 1000;
 	memset(keys, 0, 65536);
 }

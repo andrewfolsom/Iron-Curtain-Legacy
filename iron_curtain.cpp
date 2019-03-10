@@ -77,7 +77,7 @@ extern void displaySpencer(float x, float y, GLuint texture);
 extern void tracking(Missile *m, float *target, float t);
 extern void renderShip(Ship ship);
 extern void displayStartScreen();
-
+extern void scrollingBackground();
 //Externs -- Benjamin
 extern void displayBenjamin(float x, float y);
 extern void displayStartScreen2();
@@ -95,13 +95,14 @@ extern void updatePosition();
 extern void configOpFor(int ID, int destOffSet);
 //-------------------------------------------------------------------------- 
 
-Image img[6] = {
+Image img[7] = {
     "./img/NICKJA.jpg",
     "./img/andrewimg.png",
     "./img/spencerA.jpg",
     "./img/chad-egg.jpg",
     "./img/BGarza.jpg",
-    "./img/ironImage.jpg"
+    "./img/ironImage.jpg",
+    "./img/verticalBackground.jpg"
 };
 
 Global& gl = Global::getInstance();
@@ -180,10 +181,18 @@ void init_opengl(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3,img[5].width,img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
-
+    
     //Clear the screen to black
     glClearColor(0.0, 0.0, 0.0, 1.0);
+    
+    ///scrolling background
+	gl.tex.xc[0] = 0.0;
+	gl.tex.xc[1] = 0.25;
+	gl.tex.yc[0] = 0.0;
+	gl.tex.yc[1] = 1.0;
+    
 }
+
 
 void normalize2d(Vec v)
 {
@@ -486,22 +495,52 @@ void physics()
         if (tdif < -0.3)
             g.thrustOn = false;
     }
+    //scrolling physics
+    gl.tex.xc[0] -=0.0006;
+    gl.tex.xc[1] -=0.0006;
     return;
 }
 
 void render()
 {
-    if (gl.gameState == 0) //Startup
+    if (gl.gameState == 0){ //Startup
+        //init regular background
+        glBindTexture(GL_TEXTURE_2D, gl.ironImage);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3,img[5].width,img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
+    
         displayStartScreen();
-    else if (gl.gameState == 1) //Menu
+    
+    } else if (gl.gameState == 1){ //Menu
+        
+        //init regular background   
+        glBindTexture(GL_TEXTURE_2D, gl.ironImage);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3,img[5].width,img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
+    
         displayMenu();
-    else if (gl.gameState == 2) //Loading
+   
+    } else if (gl.gameState == 2){ //Loading
+       
         displayLoadingScreen();
-    else if (gl.gameState == 3) { //Gameplay
+   
+    } else if (gl.gameState == 3) { //Gameplay
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
+        
+        //scrolling background
+        glBindTexture(GL_TEXTURE_2D, gl.verticalBackground);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3,img[6].width,img[6].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
 
+        scrollingBackground();
+        
         //Draw ships
+        
         renderShip(g.ship);
         if (hideShip == 0) {
             renderShip(eShip);
@@ -544,9 +583,19 @@ void render()
         }
 
         glDisable(GL_DEPTH_TEST);    
-    } else if (gl.gameState == 4) //Pause
+    } else if (gl.gameState == 4){ //Pause
+        
+        
+    glBindTexture(GL_TEXTURE_2D, gl.ironImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3,img[5].width,img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
+    
+        
+        
+        
         displayPauseMenu();
-    else if (gl.gameState == 5) { //Credits 
+    } else if (gl.gameState == 5) { //Credits 
     //If 'c' was pressed then render credit screen
         int w = img[0].width;
         int h = img[0].height;

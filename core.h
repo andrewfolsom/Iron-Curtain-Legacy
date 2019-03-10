@@ -26,11 +26,19 @@ class Image
 /*
  * Global Class
  */
+class Texture
+{
+    public:
+    float xc[2];
+    float yc[2];
+    Texture();
+};
 
 class Global
 {
     public:
-	int xres, yres;
+	Texture tex;
+    int xres, yres;
 	char keys[65536];
 	int gameState;
 	GLuint nickImage;
@@ -39,6 +47,7 @@ class Global
 	GLuint chadImage;
 	GLuint benImg;
 	GLuint ironImage;
+    GLuint verticalBackground;
 	GLuint pauseScreen;
 	GLuint hiddenWorld;
 	GLuint errorPage;
