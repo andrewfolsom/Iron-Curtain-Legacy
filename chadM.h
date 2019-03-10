@@ -6,6 +6,16 @@ class EnemyShip : public Ship
 		int getArmadaSize();
 		void increaseArmada();
 		void decreaseArmada();
+
+		//EDITS by JACKSON
+		void updateStrafe();
+		void updateRush();
+		void updateCircle();
+		void updateBank();
+		void updateDiagRush();
+		//
+
+
 		EnemyShip *nextShip;
 		EnemyShip *prevShip;
 	private :

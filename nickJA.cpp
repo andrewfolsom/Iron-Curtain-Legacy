@@ -11,6 +11,7 @@
 #include "core.h"
 #include <stdio.h>
 #include <math.h>
+#include "chadM.h"
 extern Game g;
 extern Global gl;
 //const int RUSH = 0;
@@ -102,6 +103,12 @@ void updateRush(int iteration)
 	opForShip *move = &g.opFor[iteration];
 	move->pos[1] -= move->speedMul;
 }
+//EnemyShip compatible.
+void EnemyShip::updateRush()
+{
+	if (moveFlag)
+		pos[1] -= speedMul;
+}
 
 //2 - Strafing
 //Enemy Oscillates between two points while moving to the bottom of the screen.
@@ -113,6 +120,15 @@ void updateStrafe(int iteration)
 
 	move->pos[0] += 10*cos(move->angle);
 	move->angle+= 0.1;
+}
+//EnemyShip compatible..
+void EnemyShip::updateStrafe()
+{
+	if (moveFlag)
+		pos[1] -= speedMul;
+
+	pos[0] += 30*cos(angle);
+	angle+= 0.1;
 }
 
 //3 - Circling
@@ -126,9 +142,19 @@ void updateCircle(int iteration)
 	move->pos[0] += 10*cos(move->angle);
 	move->pos[1] += 10*sin(move->angle) - move->speedMul;
 
-
 	move->angle+= 0.1;
+}
+//EnemyShip compatible
+void EnemyShip::updateCircle() 
+{
+	pos[0] += 10*cos(angle);
 
+	if (moveFlag)
+		pos[1] += 10*sin(angle) - speedMul;
+	else
+		pos[1] += 10*sin(angle);
+
+	angle+= 0.1;
 }
 
 //4 - Bank
@@ -159,6 +185,32 @@ void updateBank(int iteration)
 
 	//printf("Opfor %i at (%f, %f)\n", g.numOpFor, move->pos[0], move->pos[1]);
 }
+//EnemyShip compatible
+void EnemyShip::updateBank()
+{
+	if (initFlag == 0) {
+		spawnPos[0] = pos[0];
+		spawnPos[1] = pos[1];
+		initFlag = 1;
+	}
+
+	float midPoint[2] = {0.0, 0.0};
+
+	if (destOffset < 450)
+		midPoint[0] = 900.0;
+
+	midPoint[1] = spawnPos[1];
+
+	pos[0] = (pow(1-t, 2.0) * spawnPos[0]) + (2*(1-t)*t*midPoint[0]) + 
+					(pow(t, 2.0) * destOffset);
+	pos[1] = (pow(1-t, 2.0) * spawnPos[1]) + (2*(1-t)*t*midPoint[1]) + 
+					(pow(t, 2.0) * (0));
+	t += 0.006;
+
+	if (t > 1.0)
+		t = 0;
+
+}
 
 //5 - Diagonal Rush
 //Enemy will follow a diagonal line from its spawn to the bottom of the screen.
@@ -166,12 +218,14 @@ void updateDiagRush(int iteration)
 {
 	opForShip *move = &g.opFor[iteration];
 
-
 	move->pos[1] -= move->speedMul;
 	move->pos[0] = (move->pos[1]-1000)/-1.13;
-
-	//printf("Opfor %i (%f, %f)\n", g.numOpFor, move->pos[0], move->pos[1]); 
-
+}
+//EnemyShip Compatible
+void EnemyShip::updateDiagRush()
+{
+	pos[1] -= speedMul;
+	pos[0]  = (pos[1]-1000)/-1.13;
 }
 
 //Movement Function

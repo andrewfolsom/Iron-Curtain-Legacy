@@ -61,6 +61,17 @@ class Ship
 		float color[3];
 		float radius;
 		int weaponType;
+
+		//EDITS - Jackson
+		Vec spawnPos;
+		float angle = 3.14159/2;
+		float t;
+		int speedMul = 1;
+		int initFlag = 0;
+		int moveFlag = 1;
+		int destOffset = 700;
+
+		//
 	public:
 		Ship();
 };
