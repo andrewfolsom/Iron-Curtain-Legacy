@@ -72,7 +72,8 @@ class Ship
 	float speed;
 	float color[3];
 	float radius;
-	int weaponType;
+	Weapon *wpn;
+    Weapon *scnd;
     public:
 	Ship();
 };

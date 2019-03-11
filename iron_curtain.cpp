@@ -111,9 +111,9 @@ Game g;
 
 X11_wrapper x11;
 
-Weapon *wpn = new Basic;
+//Weapon *wpn = new Basic;
 
-Weapon *scnd = new Secondary;
+//Weapon *scnd = new Secondary;
 
 EnemyShip eShip;
 
@@ -209,6 +209,7 @@ void normalize2d(Vec v)
 
 int check_keys(XEvent *e)
 {
+    Ship *s = &g.ship;
     if (e->type != KeyPress && e->type != KeyRelease)
         return 0;
     int key = XLookupKeysym(&e->xkey, 0);
@@ -260,24 +261,24 @@ int check_keys(XEvent *e)
                 gl.keys[XK_m] = 1;
                 break;
             case XK_1:
-                delete wpn;
-                wpn = new Basic;
+                delete s->wpn;
+                s->wpn = new Basic;
                 break;
             case XK_2:
-                delete wpn;
-                wpn = new Rapid;
+                delete s->wpn;
+                s->wpn = new Rapid;
                 break;
             case XK_3:
-                delete wpn;
-                wpn = new Scatter;
+                delete s->wpn;
+                s->wpn = new Scatter;
                 break;
             case XK_4:
-                delete wpn;
-                wpn = new Ring;
+                delete s->wpn;
+                s->wpn = new Ring;
                 break;
             case XK_5:
-                delete wpn;
-                wpn = new Pinwheel;
+                delete s->wpn;
+                s->wpn = new Pinwheel;
                 break;
             case XK_t:
                 spawnOpFor(gl.xres/2, gl.yres, 2);
@@ -483,10 +484,10 @@ void physics()
     }
 
     if (gl.keys[XK_space])
-        wpn->fire();
+        s->wpn->fire();
 
     if (gl.keys[XK_m])
-        scnd->fire();
+        s->scnd->fire();
 
     if (g.thrustOn) {
         struct timespec mtt;
