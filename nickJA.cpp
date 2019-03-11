@@ -262,3 +262,36 @@ void updatePosition()
 	}
 
 }
+
+//EnemyShip Compatible
+void EnemyShip::updatePosition()
+{
+
+	for (int i = 0; i <= g.numOpFor; i++) {
+		//opForShip *target = &g.opFor[i];
+		
+		switch (movPattern) {
+
+			case (RUSH):
+				updateRush();
+				break;
+
+			case (STRAFE):
+				updateStrafe();
+				break;
+
+			case (CIRCLING):
+				updateCircle();
+				break;
+
+			case (BANK):
+				updateBank();
+				break;
+
+			case (DIAG_RUSH):
+				updateDiagRush();
+				break;
+		}
+	}
+
+}

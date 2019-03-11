@@ -325,8 +325,8 @@ void physics()
 	//Temp function to move enemy ship
 	//e->pos[0] -= e->vel[0];
 	//e->pos[0] += e->vel[3];
-	e->moveFlag = 0;
-	e->updateStrafe();
+	e->moveFlag = 1;
+	e->updatePosition();
 	//
 
 	struct timespec bt;

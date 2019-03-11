@@ -13,6 +13,7 @@ class EnemyShip : public Ship
 		void updateCircle();
 		void updateBank();
 		void updateDiagRush();
+		void updatePosition();
 		//
 
 

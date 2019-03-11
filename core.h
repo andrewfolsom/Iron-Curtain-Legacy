@@ -63,12 +63,14 @@ class Ship
 		int weaponType;
 
 		//EDITS - Jackson
+		enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH };
 		Vec spawnPos;
 		float angle = 3.14159/2;
 		float t;
 		int speedMul = 1;
 		int initFlag = 0;
 		int moveFlag = 1;
+		int movPattern = RUSH;
 		int destOffset = 700;
 
 		//
