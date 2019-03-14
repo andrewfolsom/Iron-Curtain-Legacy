@@ -19,6 +19,8 @@ extern Global gl;
 //const int CIRCLING = 2;
 //const int BANK = 3;
 
+const Flt PI = 3.141592653589793;
+
 enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH};
 
 //DISPLAY
@@ -110,6 +112,13 @@ void EnemyShip::updateRush()
 		pos[1] -= speedMul;
 }
 
+void EnemyShip::configRush(float speed)
+{
+	movPattern = RUSH;
+
+	speedMul = speed;
+}
+
 //2 - Strafing
 //Enemy Oscillates between two points while moving to the bottom of the screen.
 //Iteration will be used to identify which entity to update the position of.
@@ -118,7 +127,7 @@ void updateStrafe(int iteration)
 	opForShip *move = &g.opFor[iteration];
 	move->pos[1] -= move->speedMul;
 
-	move->pos[0] += 10*cos(move->angle);
+	move->pos[0] = 10*cos(move->angle);
 	move->angle+= 0.1;
 }
 //EnemyShip compatible..
@@ -127,8 +136,18 @@ void EnemyShip::updateStrafe()
 	if (moveFlag)
 		pos[1] -= speedMul;
 
-	pos[0] += 30*cos(angle);
-	angle+= 0.1;
+	pos[0] = spawnPos[0] + radius*cos((angle*PI)/180);
+	angle  += angleSpd;
+}
+
+void EnemyShip::configStrafe(float rad, float angleSet, float angleSpeed)
+{
+	spawnPos[0] = pos[0];
+	spawnPos[1] = pos[1];
+	movPattern = STRAFE;
+	radius = rad;
+	angle = angleSet;
+	angleSpd = angleSpeed;
 }
 
 //3 - Circling
@@ -147,14 +166,25 @@ void updateCircle(int iteration)
 //EnemyShip compatible
 void EnemyShip::updateCircle() 
 {
-	pos[0] += 10*cos(angle);
+	pos[0] = spawnPos[0] + (radius * cos((angle*PI)/180));
 
 	if (moveFlag)
-		pos[1] += 10*sin(angle) - speedMul;
-	else
-		pos[1] += 10*sin(angle);
+		spawnPos[1] -= speedMul;
 
-	angle+= 0.1;
+	pos[1] = spawnPos[1] + (radius*sin((angle*PI)/180));
+
+	angle+= angleSpd;
+}
+
+void EnemyShip::configCircle(float rad, float angleSet, float angleSpeed)
+{
+	spawnPos[0] = pos[0];
+	spawnPos[1] = pos[1];
+
+	movPattern = CIRCLING;
+	radius = rad;
+	angle = angleSet;
+	angleSpd = angleSpeed;
 }
 
 //4 - Bank
@@ -196,20 +226,31 @@ void EnemyShip::updateBank()
 
 	float midPoint[2] = {0.0, 0.0};
 
-	if (destOffset < 450)
+	if (bankDestX < 450)
 		midPoint[0] = 900.0;
 
 	midPoint[1] = spawnPos[1];
 
 	pos[0] = (pow(1-t, 2.0) * spawnPos[0]) + (2*(1-t)*t*midPoint[0]) + 
-					(pow(t, 2.0) * destOffset);
+					(pow(t, 2.0) * bankDestX);
 	pos[1] = (pow(1-t, 2.0) * spawnPos[1]) + (2*(1-t)*t*midPoint[1]) + 
-					(pow(t, 2.0) * (0));
-	t += 0.006;
+					(pow(t, 2.0) * bankDestY);
+	t += angleSpd;
 
 	if (t > 1.0)
 		t = 0;
 
+}
+
+void EnemyShip::configBank(float destX, float destY, float speed)
+{
+	spawnPos[0] = pos[0];
+	spawnPos[1] = pos[1];
+	movPattern = BANK;
+
+	bankDestX = destX;
+	bankDestY = destY;
+	angleSpd = speed;
 }
 
 //5 - Diagonal Rush

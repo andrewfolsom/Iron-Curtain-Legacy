@@ -65,12 +65,14 @@ class Ship
 		//EDITS - Jackson
 		enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH };
 		Vec spawnPos;
-		float angle = 3.14159/2;
+		float angle;
+		float angleSpd;
 		float t;
+		float bankDestX, bankDestY;
 		int speedMul = 1;
 		int initFlag = 0;
 		int moveFlag = 1;
-		int movPattern = RUSH;
+		int movPattern = CIRCLING;
 		int destOffset = 700;
 
 		//
