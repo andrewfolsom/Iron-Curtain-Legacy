@@ -1,11 +1,8 @@
 class EnemyShip : public Ship
 {
 	public :
-		EnemyShip();
+		EnemyShip(int x, int y, int movType);
 		~EnemyShip();
-		int getArmadaSize();
-		void increaseArmada();
-		void decreaseArmada();
 
 		//EDITS by JACKSON
 		void updateStrafe();
@@ -24,8 +21,6 @@ class EnemyShip : public Ship
 
 		EnemyShip *nextShip;
 		EnemyShip *prevShip;
-		EnemyShip *headShip;
-		EnemyShip *tailShip;
 	private :
 		int health;
 		int numberOfEnemies;
@@ -35,6 +30,4 @@ class Grunt : protected EnemyShip
 {
 	public:
 		Grunt();
-	private:
-		int health;
 };
