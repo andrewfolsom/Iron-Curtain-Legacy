@@ -2,6 +2,7 @@
 #include <X11/Xlib.h>
 #include "core.h"
 #include "chadM.h"
+#include "nickJA.h"
 #include "fonts.h"
 
 extern Global& gl;
@@ -34,11 +35,7 @@ void displayChad (float x , float y, GLuint textid) {
 
 EnemyShip::EnemyShip()
 {
-	int health = 100;
-    pos[0] = gl.xres/2;
-	pos[1] = 900;
-	pos[2] = 1;
-    vel[3] = 5.0f;
+	Ship(gl.xres / 2, 900, 0);
 	color[0] = color[1] = color[2] = 0.35;
 	numberOfEnemies = 1;
     nextShip = prevShip = NULL;

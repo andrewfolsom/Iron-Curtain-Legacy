@@ -235,7 +235,7 @@ void Scatter::fire()
  */
 Ring::Ring()
 {
-    fireRate = 5.0;
+    fireRate = 1.0;
     bulletSpeed = 2.0;
     color[0] = 0.5;
     color[1] = 1.0;
@@ -340,3 +340,36 @@ void Secondary::fire()
  * Missile object constructor
  */
 Missile::Missile() { }
+
+/**
+ * Standard Enemy Weapon constructor
+ */
+EnemyStd::EnemyStd()
+{
+    bulletSpeed = -15.0;
+}
+
+/**
+ * Overload fire function for EnemyStd.
+ * Accepts an angle as an argument and uses it to keep
+ * the weapon firing in the correct direction during ship
+ * movement.
+ * @param float angle   Angle determining weapon's firing direction
+ */
+void EnemyStd::fire(float angle)
+{
+    struct timespec bt;
+    if (getTimeSlice(&bt) > fireRate) {
+        timeCopy(&g.bulletTimer, &bt);
+        if (g.nbullets < MAX_BULLETS) {
+            Bullet *b = &g.barr[g.nbullets];
+            timeCopy(&b->time, &bt);
+            setPosition(g.ship.pos, b->pos);
+            setVelocity(b->vel);
+            b->vel[0] *= cos(convertToRads(angle));
+            b->vel[1] *= sin(convertToRads(angle));
+            setColor(b->color);
+            g.nbullets++;
+        }
+    }
+}

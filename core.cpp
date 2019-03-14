@@ -82,10 +82,17 @@ Image::~Image()
 /*
  * Global Class
  */
+Texture::Texture()
+{
+   float xc[2];
+   float yc[2]; 
+}    
+
 
 Global::Global()
 {
-	xres = 900;
+	
+    xres = 900;
 	yres = 1000;
 	memset(keys, 0, 65536);
 }
@@ -112,7 +119,8 @@ Ship::Ship() {
 	radius = 25.0;
 	speed = 0.4;
 	color[0] = color[1] = color[2] = 1.0;
-	weaponType = 0;
+	wpn = new Basic;
+    scnd = new Secondary;
 }
 
 /*
