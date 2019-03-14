@@ -44,7 +44,7 @@ typedef Flt Matrix[4][4];
 #define VecCopy(a,b) (b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2]
 #define VecDot(a,b) ((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
 #define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
-							 (c)[1]=(a)[1]-(b)[1]; \
+                             (c)[1]=(a)[1]-(b)[1]; \
 (c)[2]=(a)[2]-(b)[2]
 //constants
 const float timeslice = 1.0f;
@@ -131,32 +131,31 @@ void render();
 
 int main()
 {
-	init_opengl();
-	srand(time(NULL));
-	clock_gettime(CLOCK_REALTIME, &timePause);
-	clock_gettime(CLOCK_REALTIME, &timeStart);
-	int done = 0;
-eShip.configDiagRush(800, 0, 1);
-	while (!done) {
-		while (x11.getXPending()) {
-			XEvent e = x11.getXNextEvent();
-			done = check_keys(&e);
-		}
-		clock_gettime(CLOCK_REALTIME, &timeCurrent);
-		timeSpan = timeDiff(&timeStart, &timeCurrent);
-		timeCopy(&timeStart, &timeCurrent);
-		physicsCountdown += timeSpan;
-		while (physicsCountdown >= physicsRate) {
-			physics();
-			updatePosition();
-			physicsCountdown -= physicsRate;
-		}
-		render();
-		x11.swapBuffers();
-		x11.clearWindow();
-	}
-	cleanup_fonts();
-	return 0;
+    init_opengl();
+    srand(time(NULL));
+    clock_gettime(CLOCK_REALTIME, &timePause);
+    clock_gettime(CLOCK_REALTIME, &timeStart);
+    int done = 0;
+    while (!done) {
+        while (x11.getXPending()) {
+            XEvent e = x11.getXNextEvent();
+            done = check_keys(&e);
+        }
+        clock_gettime(CLOCK_REALTIME, &timeCurrent);
+        timeSpan = timeDiff(&timeStart, &timeCurrent);
+        timeCopy(&timeStart, &timeCurrent);
+        physicsCountdown += timeSpan;
+        while (physicsCountdown >= physicsRate) {
+            physics();
+            updatePosition();
+            physicsCountdown -= physicsRate;
+        }
+        render();
+        x11.swapBuffers();
+        x11.clearWindow();
+    }
+    cleanup_fonts();
+    return 0;
 }
 
 void init_opengl(void)
@@ -250,208 +249,6 @@ int check_keys(XEvent *e)
             case XK_s:
                 gl.keys[XK_s] = 1;
                 break;
-<<<<<<< HEAD
-			case XK_space:
-				gl.keys[XK_space] = 1;
-				break;
-			case XK_c : 
-				gl.creditPage ^= 1;
-                gl.startMenu = 0;
-                gl.gamePlay = 0;
-				break;
-			case XK_Escape:
-				return 1;
-
-			case XK_p:
-				gl.gamePlay ^= 1;
-                gl.startMenu =0;
-                gl.creditPage=0;
-				break;
-			case XK_m:
-				gl.keys[XK_m] = 1;
-				break;
-			case XK_1:
-				delete wpn;
-				wpn = new Basic;
-				break;
-			case XK_2:
-				delete wpn;
-				wpn = new Rapid;
-				break;
-			case XK_3:
-				delete wpn;
-				wpn = new Scatter;
-				break;
-			case XK_4:
-				delete wpn;
-				wpn = new Ring;
-				break;
-			case XK_5:
-				delete wpn;
-				wpn = new Pinwheel;
-				break;
-			case XK_t:
-				spawnOpFor(gl.xres/2, gl.yres, 2);
-				spawnOpFor(gl.xres/4, gl.yres, 0);
-				spawnOpFor(gl.xres*.75, gl.yres, 1);
-				spawnOpFor(0, gl.yres, 4);
-				spawnOpFor(gl.xres/2, gl.yres, 3);
-				configOpFor(g.numOpFor, 700);
-				spawnOpFor(gl.xres/2, gl.yres, 3);
-				configOpFor(g.numOpFor, 0);
-
-
-				break;
-
-		}
-	}
-
-	if (e->type == KeyRelease) {
-		switch (key) {
-			case XK_a:
-				//s->vel[0] = 10.0;
-				gl.keys[XK_a] = 0;
-				break;
-			case XK_d:
-				//s->vel[0] = 10.0;
-				gl.keys[XK_d] = 0;
-				break;
-			case XK_w:
-				gl.keys[XK_w] = 0;
-				break;
-			case XK_s:
-				gl.keys[XK_s] = 0;
-				break;
-			case XK_space:
-				gl.keys[XK_space] = 0;
-				break;
-			case XK_m:
-				gl.keys[XK_m] = 0;
-				break;
-		}
-	}
-	return 0;
-}
-
-void physics()
-{
-	//float spdLeft, spdRight, spdUp, spdDown;
-	Ship *s = &g.ship;
-	if (s->pos[0] < 20.0) {
-		s->pos[0] = 20.0;
-	} else if (s->pos[0] > gl.xres - 20.0) {
-		s->pos[0] = gl.xres - 20;
-	} else if (s->pos[1] < 20.0) {
-		s->pos[1] = 20.0;
-	} else if (s->pos[1] > gl.yres - 20.0) {
-		s->pos[1] = gl.yres - 20.0;
-	}
-
-	EnemyShip *e = &eShip;
-	if (e->pos[0] < 20.0) {
-		e->pos[0] = 20.0;
-		e->vel[3] = e->vel[0];
-		e->vel[0] = 0.0;
-	} else if (e->pos[0] > gl.xres - 20.0) {
-		e->pos[0] = gl.xres - 20;
-		e->vel[0] = e->vel[3];
-		e->vel[3] = 0.0;
-	} else if (e->pos[1] < 20.0) {
-		e->pos[1] = 20.0;
-	} else if (e->pos[1] > gl.yres - 20.0) {
-		e->pos[1] = gl.yres - 20.0;
-	}
-
-	//Temp function to move enemy ship
-	//e->pos[0] -= e->vel[0];
-	//e->pos[0] += e->vel[3];
-	e->updatePosition();
-	//
-
-	struct timespec bt;
-	clock_gettime(CLOCK_REALTIME, &bt);
-	int i = 0;
-	while (i < g.nbullets) {
-		Bullet *b = &g.barr[i];
-		if (b->pos[1] > gl.yres + 10 || b->pos[1] < -10.0 ||
-			b->pos[0] > gl.xres + 10 || b->pos[0] < -10.0) {
-			memcpy(&g.barr[i], &g.barr[g.nbullets - 1], sizeof(Bullet));
-			g.nbullets--;
-			continue;
-		}
-		b->pos[0] += b->vel[0];
-		b->pos[1] += b->vel[1];
-		i++;
-	}
-
-	i = 0;
-	e = &eShip;
-	while (i < g.nmissiles) {
-		Missile *m = &g.marr[i];
-		d0 = e->pos[0] - m->pos[0];
-		d1 = e->pos[1] - m->pos[1];
-		dist = (d0*d0 + d1*d1);
-		if (dist < (radius * radius)) {
-			memcpy(&g.marr[i], &g.marr[g.nmissiles - 1], sizeof(Missile));
-			g.nmissiles--;
-			continue;
-		}
-
-		step += 0.01;
-		tracking(m, e->pos, step);
-		//
-		if (step > 1.0)
-			step = 0.0;
-		i++;
-	}
-
-	//Collision with bullets?
-	//If collision detected:
-	//     1. delete the bullet
-	//     2. delete the ship 
-	e = &eShip;
-	while (e != NULL) {
-		//is there a bullet within its radius?
-		int i=0;
-		while (i < g.nbullets) {
-			Bullet *b = &g.barr[i];
-			Flt d0 = b->pos[0] - e->pos[0];
-			Flt d1 = b->pos[1] - e->pos[1];
-			Flt dist = (d0*d0 + d1*d1);
-			if (dist < (e->radius*e->radius)) {
-				//delete the ship
-				++hideShip;
-				//delete the bullet...
-				memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
-				g.nbullets--;
-				if (e == NULL)
-					break;
-			}
-
-			i++;
-		}
-		if (e == NULL)
-			break;
-		e = e->nextShip;
-	}
-
-	s = &g.ship;
-
-	if (gl.keys[XK_a]) {
-		s->pos[0] -= s->vel[0];
-		s->vel[0] += s->speed;
-		if (s->vel[0] > MAX_VELOCITY)
-			s->vel[0] = MAX_VELOCITY;
-	} else {
-		if(s->vel[0] > 0.0) {
-			s->pos[0] -= s->vel[0];
-			s->vel[0] -= s->speed;
-		} else {
-			s->vel[0] = 0.0;
-		}
-	}
-=======
->>>>>>> f70a3af6643e1acbb82de2154c4e52008e984d16
 
             case XK_space:
                 gl.keys[XK_space] = 1;
