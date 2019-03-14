@@ -350,7 +350,11 @@ EnemyStd::EnemyStd()
 }
 
 /**
- * Default fire for Standard Enemy Weapon
+ * Overload fire function for EnemyStd.
+ * Accepts an angle as an argument and uses it to keep
+ * the weapon firing in the correct direction during ship
+ * movement.
+ * @param float angle   Angle determining weapon's firing direction
  */
 void EnemyStd::fire(float angle)
 {
