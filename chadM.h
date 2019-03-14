@@ -23,6 +23,8 @@ class EnemyShip : public Ship
 
 		EnemyShip *nextShip;
 		EnemyShip *prevShip;
+		EnemyShip *headShip;
+		EnemyShip *tailShip;
 	private :
 		int health;
 		int numberOfEnemies;

@@ -117,9 +117,6 @@ X11_wrapper x11;
 
 EnemyShip eShip;
 
-//TEMP VAR
-int hideShip = 0;
-//
 
 //Function Prototypes
 double getTimeSlice(timespec* bt);
@@ -136,7 +133,7 @@ int main()
 	clock_gettime(CLOCK_REALTIME, &timePause);
 	clock_gettime(CLOCK_REALTIME, &timeStart);
 	int done = 0;
-eShip.configBank(200, 200, 0.006);
+
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -341,24 +338,21 @@ void physics()
         s->pos[1] = gl.yres - 20.0;
     }
 
-    EnemyShip *e = &eShip;
-    if (e->pos[0] < 20.0) {
-        e->pos[0] = 20.0;
-        e->vel[3] = e->vel[0];
-        e->vel[0] = 0.0;
-    } else if (e->pos[0] > gl.xres - 20.0) {
-        e->pos[0] = gl.xres - 20;
-        e->vel[0] = e->vel[3];
-        e->vel[3] = 0.0;
-    } else if (e->pos[1] < 20.0) {
-        e->pos[1] = 20.0;
-    } else if (e->pos[1] > gl.yres - 20.0) {
-        e->pos[1] = gl.yres - 20.0;
+    for(int i =; i < eShip.getArmadaSize(); ++i){ 
+        if (e[i]->pos[0] < 20.0) {
+            e[i]->pos[0] = 20.0;
+            e[i]->vel[3] = e->vel[0];
+            e[i]->vel[0] = 0.0;
+        } else if (e->pos[0] > gl.xres - 20.0) {
+            e[i]->pos[0] = gl.xres - 20;
+            e[i]->vel[0] = e->vel[3];
+            e[i]->vel[3] = 0.0;
+        } else if (e->pos[1] < 20.0) {
+            e[i]->pos[1] = 20.0;
+        } else if (e->pos[1] > gl.yres - 20.0) {
+            e[i]->pos[1] = gl.yres - 20.0;
+        }
     }
-
-    //Temp function to move enemy ship
-    e->pos[0] -= e->vel[0];
-    e->pos[0] += e->vel[3];
     
 
     struct timespec bt;
