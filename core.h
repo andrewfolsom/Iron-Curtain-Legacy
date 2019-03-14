@@ -66,31 +66,31 @@ class Global
 
 class Ship
 {
-    public:
-	Vec pos;
-	float vel[4];
-	float speed;
-	float color[3];
-	float radius;
-	Weapon *wpn;
-    Weapon *scnd;
+	public:
+		Vec pos;
+		float vel[4];
+		float speed;
+		float color[3];
+		float radius;
+		Weapon *wpn;
+		Weapon *scnd;
 
-	//EDITS - Jackson
-	enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH };
-	Vec spawnPos;
-	float angle;
-	float angleSpd;
-	float t;
-	float bankDestX, bankDestY;
-	int speedMul = 1;
-	int initFlag = 0;
-	int moveFlag = 1;
-	int movPattern = CIRCLING;
-	int destOffset = 700;
+		//EDITS - Jackson
+		enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH };
+		Vec spawnPos;
+		float angle;
+		float angleSpd;
+		float t;
+		float destX, destY;
+		int speedMul = 1;
+		int initFlag = 0;
+		int moveFlag = -1;
+		int movPattern = RUSH;
+		int destOffset = 700;
 
-	//
-
-	Ship();
+		//
+	public:
+		Ship();
 };
 
 /*

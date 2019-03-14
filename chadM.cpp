@@ -5,6 +5,8 @@
 #include "fonts.h"
 
 extern Global& gl;
+extern EnemyShip *headShip;
+extern EnemyShip *tailShip;
 
 void displayChad (float x , float y, GLuint textid) {
     float wid = 100.0;
@@ -32,46 +34,28 @@ void displayChad (float x , float y, GLuint textid) {
     ggprint16(&r, 16, color, "Chad Manning");
 }
 
-EnemyShip::EnemyShip()
+EnemyShip::EnemyShip(int x, int y, int movType)
 {
-	spawnPos[0] = gl.xres / 2;
-    spawnPos[1] = 900;
-    spawnPos[2] = 1;
 	color[0] = color[1] = color[2] = 0.35;
-    numberOfEnemies = 0;
-    nextShip = prevShip = NULL;
+    health = 100;
+    prevShip = tailShip;
+    nextShip = NULL;
+    tailShip = this;
 
+    if(headShip == NULL){
+        headShip = this;
+    }
 }
-
-// EnemyShip::spawnEnemy(int x, int y, int movType)
-// {
-//     spa
-// }
 
 EnemyShip::~EnemyShip()
 {
-    /*
-    if (this->prevShip != NULL) {
-        this->prevShip->nextShip = this->nextShip;
+    
+    if (prevShip != NULL) {
+        prevShip->nextShip = nextShip;
     }
-    if (this->nextShip != NULL) {
-        this->nextShip->prevShip = this->prevShip;
-    }*/
-}
-
-int EnemyShip::getArmadaSize() 
-{
-	return numberOfEnemies;
-}
-
-void EnemyShip::increaseArmada()
-{
-    ++numberOfEnemies;
-}
-
-void EnemyShip::decreaseArmada()
-{
-    --numberOfEnemies;
+    if (nextShip != NULL) {
+        nextShip->prevShip = prevShip;
+    }
 }
 
 void renderShip(Ship ship)

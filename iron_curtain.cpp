@@ -115,7 +115,8 @@ X11_wrapper x11;
 
 //Weapon *scnd = new Secondary;
 
-EnemyShip eShip;
+EnemyShip *headShip = NULL;
+EnemyShip *tailShip = NULL;
 
 
 //Function Prototypes
@@ -338,21 +339,30 @@ void physics()
         s->pos[1] = gl.yres - 20.0;
     }
 
-    for(int i =; i < eShip.getArmadaSize(); ++i){ 
-        if (e[i]->pos[0] < 20.0) {
-            e[i]->pos[0] = 20.0;
-            e[i]->vel[3] = e->vel[0];
-            e[i]->vel[0] = 0.0;
+    EnemyShip *e = headShip;
+    //Update positions of all enemie ships
+    while(e != NULL){
+        e->updatePosition();
+        e = e->nextShip;
+    }
+    
+    while(e != NULL){
+        if (e->pos[0] < 20.0) {
+            e->pos[0] = 20.0;
+            e->vel[3] = e->vel[0];
+            e->vel[0] = 0.0;
         } else if (e->pos[0] > gl.xres - 20.0) {
-            e[i]->pos[0] = gl.xres - 20;
-            e[i]->vel[0] = e->vel[3];
-            e[i]->vel[3] = 0.0;
+            e->pos[0] = gl.xres - 20;
+            e->vel[0] = e->vel[3];
+            e->vel[3] = 0.0;
         } else if (e->pos[1] < 20.0) {
-            e[i]->pos[1] = 20.0;
+            e->pos[1] = 20.0;
         } else if (e->pos[1] > gl.yres - 20.0) {
-            e[i]->pos[1] = gl.yres - 20.0;
+            e->pos[1] = gl.yres - 20.0;
         }
     }
+    
+        
     
 
     struct timespec bt;
@@ -372,7 +382,7 @@ void physics()
     }
 
     i = 0;
-    e = &eShip;
+    e = headShip;
     while (i < g.nmissiles) {
         Missile *m = &g.marr[i];
         d0 = e->pos[0] - m->pos[0];
@@ -396,7 +406,7 @@ void physics()
     //If collision detected:
     //     1. delete the bullet
     //     2. delete the ship 
-    e = &eShip;
+    e = headShip;
     while (e != NULL) {
         //is there a bullet within its radius?
         int i=0;
@@ -407,7 +417,7 @@ void physics()
             Flt dist = (d0*d0 + d1*d1);
             if (dist < (e->radius*e->radius)) {
                 //delete the ship
-                ++hideShip;
+                //TODO add del function
                 //delete the bullet...
                 memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
                 g.nbullets--;
@@ -547,14 +557,12 @@ void render()
         //Draw ships
         
         renderShip(g.ship);
-        if (hideShip == 0) {
-            renderShip(eShip);
-        } else {
-            ++hideShip;
+        EnemyShip *e = headShip;
+        while(e != NULL){
+            renderShip(*e);
+            e = e->nextShip;
         }
-        if (hideShip > 100) {
-            hideShip = 0;
-        }
+        
 
         //Draw enemy ships
         renderOpFor();
