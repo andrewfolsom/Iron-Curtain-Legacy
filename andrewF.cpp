@@ -235,7 +235,7 @@ void Scatter::fire()
  */
 Ring::Ring()
 {
-    fireRate = 5.0;
+    fireRate = 1.0;
     bulletSpeed = 2.0;
     color[0] = 0.5;
     color[1] = 1.0;
@@ -340,3 +340,11 @@ void Secondary::fire()
  * Missile object constructor
  */
 Missile::Missile() { }
+
+/**
+ * Standard Enemy Weapon constructor
+ */
+EnemyStd::EnemyStd()
+{
+    bulletSpeed = -15.0;
+}
