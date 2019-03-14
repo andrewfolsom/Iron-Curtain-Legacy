@@ -16,36 +16,48 @@ typedef float Vec[3];
 
 class Image
 {
-	public:
-		int width, height;
-		unsigned char *data;
-		Image(const char *);
-		~Image();
+    public:
+	int width, height;
+	unsigned char *data;
+	Image(const char *);
+	~Image();
 };
 
 /*
  * Global Class
  */
+class Texture
+{
+    public:
+    float xc[2];
+    float yc[2];
+    Texture();
+};
 
 class Global
 {
-	public:
-		int xres, yres;
-		char keys[65536];
-		bool creditPage = false;
-        bool startMenu = true;
-        bool gamePlay = false;
-		GLuint nickImage;
-		GLuint andrewImage;
-		GLuint spencerImage;
-		GLuint chadImage;
-		GLuint benImg;
-        GLuint ironImage;
-		static Global& getInstance();
-	private:
-		Global();
-		Global(Global const&);
-		Global& operator=(Global const&);
+    public:
+	Texture tex;
+    int xres, yres;
+	char keys[65536];
+	int gameState;
+	GLuint nickImage;
+	GLuint andrewImage;
+	GLuint spencerImage;
+	GLuint chadImage;
+	GLuint benImg;
+	GLuint ironImage;
+    GLuint verticalBackground;
+	GLuint pauseScreen;
+	GLuint hiddenWorld;
+	GLuint errorPage;
+	GLuint startScreen;
+	GLuint loadingScreen;
+	static Global& getInstance();
+    private:
+	Global();
+	Global(Global const&);
+	Global& operator=(Global const&);
 };
 
 /*
@@ -54,30 +66,31 @@ class Global
 
 class Ship
 {
-	public:
-		Vec pos;
-		float vel[4];
-		float speed;
-		float color[3];
-		float radius;
-		int weaponType;
+    public:
+	Vec pos;
+	float vel[4];
+	float speed;
+	float color[3];
+	float radius;
+	Weapon *wpn;
+    Weapon *scnd;
 
-		//EDITS - Jackson
-		enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH };
-		Vec spawnPos;
-		float angle;
-		float angleSpd;
-		float t;
-		float bankDestX, bankDestY;
-		int speedMul = 1;
-		int initFlag = 0;
-		int moveFlag = 1;
-		int movPattern = CIRCLING;
-		int destOffset = 700;
+	//EDITS - Jackson
+	enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH };
+	Vec spawnPos;
+	float angle;
+	float angleSpd;
+	float t;
+	float bankDestX, bankDestY;
+	int speedMul = 1;
+	int initFlag = 0;
+	int moveFlag = 1;
+	int movPattern = CIRCLING;
+	int destOffset = 700;
 
-		//
-	public:
-		Ship();
+	//
+
+	Ship();
 };
 
 /*
@@ -86,24 +99,24 @@ class Ship
  */
 class opForShip
 {
-	public:
-		Vec pos;
-		float vel[4];
-		float speed;
-		float color[3] = {255.0, 0.0, 0.0};
-		int weaponType;
-		int movPattern = 1;
-		int speedMul = 1;
-
-		float angle = 90.0;
-		float slope;
-		float t = 0.0;
-		Vec spawnPos;
-		int destOffset = 0.0;
-		
-		opForShip();
-		opForShip(const opForShip&);
-		opForShip& operator= (const opForShip&);
+    public:
+	Vec pos;
+	float vel[4];
+	float speed;
+	float color[3] = {255.0, 0.0, 0.0};
+	int weaponType;
+	int movPattern = 1;
+	int speedMul = 1;
+	//Currently needed for movement
+	float angle = 90.0;
+	float slope;
+	float t = 0.0;
+	Vec spawnPos;
+	int destOffset = 0.0;
+	//
+	opForShip();
+	opForShip(const opForShip&);
+	opForShip& operator= (const opForShip&);
 };
 
 /*
@@ -112,13 +125,13 @@ class opForShip
 
 class Bullet
 {
-	public:
-		Vec pos;
-		Vec vel;
-		float color[3];
-		timespec time;
-	public:
-		Bullet();
+    public:
+	Vec pos;
+	Vec vel;
+	float color[3];
+	timespec time;
+    public:
+	Bullet();
 };
 
 /*
@@ -127,25 +140,25 @@ class Bullet
 
 class Game
 {
-	public:
-		Ship ship;
-		Bullet *barr;
-		Missile *marr;
-		int nbullets;
-		int nmissiles;
-		Flt radius;
-		timespec bulletTimer;
-		timespec missileTimer;
-		timespec thrustTimer;
-		bool thrustOn;
-//-----------------------------
-		//Jackson
-		opForShip opFor[100];
-		int numOpFor;
-//------------------------------
-	public:
-		Game();
-		~Game();
+    public:
+	Ship ship;
+	Bullet *barr;
+	Missile *marr;
+	int nbullets;
+	int nmissiles;
+	Flt radius;
+	timespec bulletTimer;
+	timespec missileTimer;
+	timespec thrustTimer;
+	bool thrustOn;
+	//-----------------------------
+	//Jackson
+	opForShip opFor[100];
+	int numOpFor;
+	//------------------------------
+    public:
+	Game();
+	~Game();
 };
 
 /*
@@ -154,19 +167,19 @@ class Game
 
 class X11_wrapper
 {
-	private:
-		Display *dpy;
-		Window win;
-		GLXContext glc;
-	public:
-		X11_wrapper();
-		~X11_wrapper();
-		void set_title();
-		void setup_screen_res(const int, const int);
-		void swapBuffers();
-		void clearWindow();
-		bool getXPending();
-		XEvent getXNextEvent();
+    private:
+	Display *dpy;
+	Window win;
+	GLXContext glc;
+    public:
+	X11_wrapper();
+	~X11_wrapper();
+	void set_title();
+	void setup_screen_res(const int, const int);
+	void swapBuffers();
+	void clearWindow();
+	bool getXPending();
+	XEvent getXNextEvent();
 };
 
 #endif
