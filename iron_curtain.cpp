@@ -329,7 +329,181 @@ int check_keys(XEvent *e)
 
 void physics()
 {
+    //float spdLeft, spdRight, spdUp, spdDown;
+    Ship *s = &g.ship;
+    if (s->pos[0] < 20.0) {
+        s->pos[0] = 20.0;
+    } else if (s->pos[0] > gl.xres - 20.0) {
+        s->pos[0] = gl.xres - 20;
+    } else if (s->pos[1] < 20.0) {
+        s->pos[1] = 20.0;
+    } else if (s->pos[1] > gl.yres - 20.0) {
+        s->pos[1] = gl.yres - 20.0;
+    }
 
+    EnemyShip *e = &eShip;
+    if (e->pos[0] < 20.0) {
+        e->pos[0] = 20.0;
+        e->vel[3] = e->vel[0];
+        e->vel[0] = 0.0;
+    } else if (e->pos[0] > gl.xres - 20.0) {
+        e->pos[0] = gl.xres - 20;
+        e->vel[0] = e->vel[3];
+        e->vel[3] = 0.0;
+    } else if (e->pos[1] < 20.0) {
+        e->pos[1] = 20.0;
+    } else if (e->pos[1] > gl.yres - 20.0) {
+        e->pos[1] = gl.yres - 20.0;
+    }
+
+    //Temp function to move enemy ship
+    e->pos[0] -= e->vel[0];
+    e->pos[0] += e->vel[3];
+    
+
+    struct timespec bt;
+    clock_gettime(CLOCK_REALTIME, &bt);
+    int i = 0;
+    while (i < g.nbullets) {
+        Bullet *b = &g.barr[i];
+        if (b->pos[1] > gl.yres + 10 || b->pos[1] < -10.0 ||
+                b->pos[0] > gl.xres + 10 || b->pos[0] < -10.0) {
+            memcpy(&g.barr[i], &g.barr[g.nbullets - 1], sizeof(Bullet));
+            g.nbullets--;
+            continue;
+        }
+        b->pos[0] += b->vel[0];
+        b->pos[1] += b->vel[1];
+        i++;
+    }
+
+    i = 0;
+    e = &eShip;
+    while (i < g.nmissiles) {
+        Missile *m = &g.marr[i];
+        d0 = e->pos[0] - m->pos[0];
+        d1 = e->pos[1] - m->pos[1];
+        dist = (d0*d0 + d1*d1);
+        if (dist < (radius * radius)) {
+            memcpy(&g.marr[i], &g.marr[g.nmissiles - 1], sizeof(Missile));
+            g.nmissiles--;
+            continue;
+        }
+
+        step += 0.01;
+        tracking(m, e->pos, step);
+        //
+        if (step > 1.0)
+            step = 0.0;
+        i++;
+    }
+
+    //Collision with bullets?
+    //If collision detected:
+    //     1. delete the bullet
+    //     2. delete the ship 
+    e = &eShip;
+    while (e != NULL) {
+        //is there a bullet within its radius?
+        int i=0;
+        while (i < g.nbullets) {
+            Bullet *b = &g.barr[i];
+            Flt d0 = b->pos[0] - e->pos[0];
+            Flt d1 = b->pos[1] - e->pos[1];
+            Flt dist = (d0*d0 + d1*d1);
+            if (dist < (e->radius*e->radius)) {
+                //delete the ship
+                ++hideShip;
+                //delete the bullet...
+                memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
+                g.nbullets--;
+                if (e == NULL)
+                    break;
+            }
+
+            i++;
+        }
+        if (e == NULL)
+            break;
+        e = e->nextShip;
+    }
+
+    s = &g.ship;
+
+    if (gl.keys[XK_a]) {
+        s->pos[0] -= s->vel[0];
+        s->vel[0] += s->speed;
+        if (s->vel[0] > MAX_VELOCITY)
+            s->vel[0] = MAX_VELOCITY;
+    } else {
+        if(s->vel[0] > 0.0) {
+            s->pos[0] -= s->vel[0];
+            s->vel[0] -= s->speed;
+        } else {
+            s->vel[0] = 0.0;
+        }
+    }
+
+
+    if (gl.keys[XK_d]) {
+        s->pos[0] += s->vel[1];
+        s->vel[1] += s->speed;
+        if (s->vel[1] > MAX_VELOCITY)
+            s->vel[1] = MAX_VELOCITY;
+    } else {
+        if(s->vel[1] > 0.0) {
+            s->pos[0] += s->vel[1];
+            s->vel[1] -= s->speed;
+        } else {
+            s->vel[1] = 0.0;
+        }
+    }
+
+    if (gl.keys[XK_w]) {
+        s->pos[1] += s->vel[2];
+        s->vel[2] += s->speed;
+        if (s->vel[2] > MAX_VELOCITY)
+            s->vel[2] = MAX_VELOCITY;
+    } else {
+        if(s->vel[2] > 0.0) {
+            s->pos[1] += s->vel[2];
+            s->vel[2] -= s->speed;
+        } else {
+            s->vel[2] = 0.0;
+        }
+    }
+
+    if (gl.keys[XK_s]) {
+        s->pos[1] -= s->vel[3];
+        s->vel[3] += s->speed;
+        if (s->vel[3] > MAX_VELOCITY)
+            s->vel[3] = MAX_VELOCITY;
+    } else {
+        if(s->vel[3] > 0.0) {
+            s->pos[1] -= s->vel[3];
+            s->vel[3] -= s->speed;
+        } else {
+            s->vel[3] = 0.0;
+        }
+    }
+
+    if (gl.keys[XK_space])
+        s->wpn->fire();
+
+    if (gl.keys[XK_m])
+        s->scnd->fire();
+
+    if (g.thrustOn) {
+        struct timespec mtt;
+        clock_gettime(CLOCK_REALTIME, &mtt);
+        double tdif = timeDiff(&mtt, &g.thrustTimer);
+        if (tdif < -0.3)
+            g.thrustOn = false;
+    }
+    //scrolling physics
+    gl.tex.xc[0] -=0.0006;
+    gl.tex.xc[1] -=0.0006;
+    return;
 }
 
 void render()
