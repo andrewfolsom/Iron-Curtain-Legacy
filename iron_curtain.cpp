@@ -160,7 +160,6 @@ int main()
 
 void init_opengl(void)
 {
-    glEnable(GL_TEXTURE_2D);
 
     glViewport(0, 0, gl.xres, gl.yres);
     glMatrixMode(GL_PROJECTION); glLoadIdentity();
@@ -506,22 +505,26 @@ void render()
 {
     if (gl.gameState == 0){ //Startup
         //init regular background
+        glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, gl.ironImage);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, 3,img[5].width,img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
     
         displayStartScreen();
+        glDisable(GL_TEXTURE_2D);
     
     } else if (gl.gameState == 1){ //Menu
         
-        //init regular background   
+        //init regular background
+        glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, gl.ironImage);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, 3,img[5].width,img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
     
         displayMenu();
+        glDisable(GL_TEXTURE_2D);
    
     } else if (gl.gameState == 2){ //Loading
        
@@ -533,12 +536,14 @@ void render()
         glEnable(GL_DEPTH_TEST);
         
         //scrolling background
+        glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, gl.verticalBackground);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, 3,img[6].width,img[6].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
 
         scrollingBackground();
+        glDisable(GL_TEXTURE_2D);
         
         //Draw ships
         
@@ -586,7 +591,7 @@ void render()
         glDisable(GL_DEPTH_TEST);    
     } else if (gl.gameState == 4){ //Pause
         
-        
+    glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, gl.ironImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -596,11 +601,13 @@ void render()
         
         
         displayPauseMenu();
+        glDisable(GL_TEXTURE_2D);
     } else if (gl.gameState == 5) { //Credits 
     //If 'c' was pressed then render credit screen
         int w = img[0].width;
         int h = img[0].height;
 
+        glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, gl.nickImage);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -643,6 +650,8 @@ void render()
         displayAndrew(gl.xres/4, gl.yres/4, gl.andrewImage);
         displayChad( 700, gl.yres/2 + 250, gl.chadImage); 
         displayBenjamin(gl.xres/4, 3*gl.yres/4);
+
+        glDisable(GL_TEXTURE_2D);
     } else if (gl.gameState == 6) //Hidden Levels
         displayHiddenWorld();
     else
