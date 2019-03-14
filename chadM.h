@@ -9,14 +9,15 @@ class EnemyShip : public Ship
 
 		//EDITS by JACKSON
 		void updateStrafe();
-		void configStrafe(float radius, float angleSet, float angleSpeed);
+		void configStrafe(float radius, float angleSet, float angleSpeed, float speed, int dir);
 		void updateRush();
-		void configRush(float speed);
+		void configRush(float speed, int dir);
 		void updateCircle();
-		void configCircle(float radius, float angleSet, float angleSpeed);
+		void configCircle(float radius, float angleSet, float angleSpeed, float speed, int dir);
 		void updateBank();
 		void configBank(float destX, float destY, float speed);
 		void updateDiagRush();
+		void configDiagRush(float x, float y, float speed);
 		void updatePosition();
 		//
 

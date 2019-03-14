@@ -121,7 +121,7 @@ int main()
 	clock_gettime(CLOCK_REALTIME, &timePause);
 	clock_gettime(CLOCK_REALTIME, &timeStart);
 	int done = 0;
-eShip.configBank(200, 200, 0.006);
+eShip.configDiagRush(800, 0, 1);
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -326,7 +326,6 @@ void physics()
 	//Temp function to move enemy ship
 	//e->pos[0] -= e->vel[0];
 	//e->pos[0] += e->vel[3];
-	e->moveFlag = 1;
 	e->updatePosition();
 	//
 

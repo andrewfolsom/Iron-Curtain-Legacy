@@ -68,11 +68,11 @@ class Ship
 		float angle;
 		float angleSpd;
 		float t;
-		float bankDestX, bankDestY;
+		float destX, destY;
 		int speedMul = 1;
 		int initFlag = 0;
-		int moveFlag = 1;
-		int movPattern = CIRCLING;
+		int moveFlag = -1;
+		int movPattern = RUSH;
 		int destOffset = 700;
 
 		//

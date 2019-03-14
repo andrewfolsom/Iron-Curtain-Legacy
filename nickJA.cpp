@@ -108,14 +108,16 @@ void updateRush(int iteration)
 //EnemyShip compatible.
 void EnemyShip::updateRush()
 {
-	if (moveFlag)
-		pos[1] -= speedMul;
+		pos[1] += (speedMul * moveFlag);
 }
-
-void EnemyShip::configRush(float speed)
+//Speed affects movement speed of an object.
+//dir = Controls direction of vertical movement.
+//		1 = move UP, 0 = NO MOVEMENT, -1 = move DOWN
+void EnemyShip::configRush(float speed, int dir)
 {
 	movPattern = RUSH;
 
+	moveFlag = dir;
 	speedMul = speed;
 }
 
@@ -133,21 +135,30 @@ void updateStrafe(int iteration)
 //EnemyShip compatible..
 void EnemyShip::updateStrafe()
 {
-	if (moveFlag)
-		pos[1] -= speedMul;
+	pos[1] += speedMul* moveFlag;
 
 	pos[0] = spawnPos[0] + radius*cos((angle*PI)/180);
 	angle  += angleSpd;
 }
+//rad = outer bound of strafe.
+//angleSet = initial angle, affects initial position of object. 
+//			 generally 90 will keep object at initial position.
+//angleSpeed = The speed of the object's oscillation.
+//speed = speedMul for object's vertical movement
+//dir = Controls direction of vertical movement.
+//		1 = move UP, 0 = NO MOVEMENT, -1 = move DOWN
 
-void EnemyShip::configStrafe(float rad, float angleSet, float angleSpeed)
+void EnemyShip::configStrafe(float rad, float angleSet, float angleSpeed, float speed, int dir)
 {
 	spawnPos[0] = pos[0];
 	spawnPos[1] = pos[1];
+
 	movPattern = STRAFE;
 	radius = rad;
 	angle = angleSet;
 	angleSpd = angleSpeed;
+	speedMul = speed;
+	moveFlag = dir;
 }
 
 //3 - Circling
@@ -168,15 +179,20 @@ void EnemyShip::updateCircle()
 {
 	pos[0] = spawnPos[0] + (radius * cos((angle*PI)/180));
 
-	if (moveFlag)
-		spawnPos[1] -= speedMul;
+		spawnPos[1] += speedMul * moveFlag;
 
 	pos[1] = spawnPos[1] + (radius*sin((angle*PI)/180));
 
 	angle+= angleSpd;
 }
 
-void EnemyShip::configCircle(float rad, float angleSet, float angleSpeed)
+//rad = Radius of circle centered at spawn position.
+//angleSet = initial angle. 90 will set the object at rad units above starting position.
+//angleSpeed = speed at which object circles.
+//speed = speedMul for object's vertical movement
+//dir = Controls direction of vertical movement.
+//		1 = move UP, 0 = NO MOVEMENT, -1 = move DOWN
+void EnemyShip::configCircle(float rad, float angleSet, float angleSpeed, float speed, int dir)
 {
 	spawnPos[0] = pos[0];
 	spawnPos[1] = pos[1];
@@ -185,6 +201,8 @@ void EnemyShip::configCircle(float rad, float angleSet, float angleSpeed)
 	radius = rad;
 	angle = angleSet;
 	angleSpd = angleSpeed;
+	speedMul = speed;
+	moveFlag = dir;
 }
 
 //4 - Bank
@@ -226,30 +244,33 @@ void EnemyShip::updateBank()
 
 	float midPoint[2] = {0.0, 0.0};
 
-	if (bankDestX < 450)
+	if (destX < 450)
 		midPoint[0] = 900.0;
 
 	midPoint[1] = spawnPos[1];
 
 	pos[0] = (pow(1-t, 2.0) * spawnPos[0]) + (2*(1-t)*t*midPoint[0]) + 
-					(pow(t, 2.0) * bankDestX);
+					(pow(t, 2.0) * destX);
 	pos[1] = (pow(1-t, 2.0) * spawnPos[1]) + (2*(1-t)*t*midPoint[1]) + 
-					(pow(t, 2.0) * bankDestY);
+					(pow(t, 2.0) * destY);
 	t += angleSpd;
 
 	if (t > 1.0)
 		t = 0;
 
 }
-
-void EnemyShip::configBank(float destX, float destY, float speed)
+//destX/destY = The target coordinates for object's path.
+//speed = speed at which object follows curve.
+//SPEED IS ITERATED FROM A RANGE OF 0-1
+//SPEED MUST BE A SMALL VALUE, AROUND 0.005 FOR EXAMPLE.
+void EnemyShip::configBank(float x, float y, float speed)
 {
 	spawnPos[0] = pos[0];
 	spawnPos[1] = pos[1];
 	movPattern = BANK;
 
-	bankDestX = destX;
-	bankDestY = destY;
+	destX = x;
+	destY = y;
 	angleSpd = speed;
 }
 
@@ -265,8 +286,20 @@ void updateDiagRush(int iteration)
 //EnemyShip Compatible
 void EnemyShip::updateDiagRush()
 {
-	pos[1] -= speedMul;
-	pos[0]  = (pos[1]-1000)/-1.13;
+	pos[1] += (speedMul * sin((3*PI/2) - angle));
+	pos[0] += (speedMul * cos((3*PI/2) - angle));
+
+	printf("Angle is %f, x is %f, y is %f\n", angle, pos[0], pos[1]);
+}
+
+void EnemyShip::configDiagRush(float x, float y, float speed)
+{
+	movPattern = DIAG_RUSH;
+
+	spawnPos[0] = pos[0];
+	spawnPos[1] = pos[1];
+	angle = atan((x-spawnPos[0]) / (y-spawnPos[1]));
+	speedMul = speed;
 }
 
 //Movement Function
