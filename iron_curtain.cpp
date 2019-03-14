@@ -279,6 +279,10 @@ int check_keys(XEvent *e)
                 delete s->wpn;
                 s->wpn = new Pinwheel;
                 break;
+            case XK_6:
+                delete s->wpn;
+                s->wpn = new EnemyStd;
+                break;
             case XK_t:
                 spawnOpFor(gl.xres/2, gl.yres, 2);
                 spawnOpFor(gl.xres/4, gl.yres, 0);

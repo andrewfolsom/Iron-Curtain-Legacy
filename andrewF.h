@@ -87,6 +87,7 @@ class EnemyStd : public Basic
 {
     public:
         EnemyStd();
+        void fire(float angle);
 };
 
 #endif

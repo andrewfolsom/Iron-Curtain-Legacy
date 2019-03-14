@@ -348,3 +348,24 @@ EnemyStd::EnemyStd()
 {
     bulletSpeed = -15.0;
 }
+
+/**
+ * Default fire for Standard Enemy Weapon
+ */
+void EnemyStd::fire(float angle)
+{
+    struct timespec bt;
+    if (getTimeSlice(&bt) > fireRate) {
+        timeCopy(&g.bulletTimer, &bt);
+        if (g.nbullets < MAX_BULLETS) {
+            Bullet *b = &g.barr[g.nbullets];
+            timeCopy(&b->time, &bt);
+            setPosition(g.ship.pos, b->pos);
+            setVelocity(b->vel);
+            b->vel[0] *= cos(convertToRads(angle));
+            b->vel[1] *= sin(convertToRads(angle));
+            setColor(b->color);
+            g.nbullets++;
+        }
+    }
+}
