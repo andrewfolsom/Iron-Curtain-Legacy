@@ -5,6 +5,20 @@
 #ifndef WEAPONS_H
 #define WEAPONS_H
 
+//===========================================================
+//              DEFINITION OF WEAPON TYPE ENUM
+//===========================================================
+enum wpnType {
+    basic = 0,
+    rapid,
+    scatter,
+    ring,
+    pinwheel,
+    missile,
+    enemyStd,
+    upgrade
+};
+
 // Player Weapon Declarations
 
 class Weapon
@@ -62,6 +76,8 @@ public:
 	void fire();
 };
 
+// Secondary Weapon Declarations
+
 class Secondary : public Basic
 {
 public:
@@ -82,7 +98,7 @@ public:
 };
 
 //Added Lab 8 03/14/2019
-
+// Enemy Weapon Declarations
 class EnemyStd : public Basic
 {
     public:
@@ -90,4 +106,10 @@ class EnemyStd : public Basic
         void fire(float angle);
 };
 
+// Upgrade Declarations
+
+class Upgrade : public Basic {
+    public:
+        Upgrade();
+};
 #endif

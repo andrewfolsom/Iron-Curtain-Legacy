@@ -1,6 +1,5 @@
 #include <GL/glx.h>
 #include <stdio.h>
-#include "andrewF.h"
 #include <cmath>
 #include "fonts.h"
 #include "andrewF.h"
@@ -372,4 +371,13 @@ void EnemyStd::fire(float angle)
             g.nbullets++;
         }
     }
+}
+
+/**
+ * Upgrade class constructor
+ */
+Upgrade::Upgrade()
+{
+    bulletSpeed = 5.0;
+    color[0] = color[1] = color[2] = 1.0;
 }
