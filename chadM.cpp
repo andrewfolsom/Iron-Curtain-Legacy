@@ -36,20 +36,24 @@ void displayChad (float x , float y, GLuint textid) {
 
 EnemyShip::EnemyShip(int x, int y, int movType)
 {
+    pos[0] = x;
+    pos[1] = y;
+    pos[2] = 1;
 	color[0] = color[1] = color[2] = 0.35;
     health = 100;
-    prevShip = tailShip;
-    nextShip = NULL;
-    tailShip = this;
-
-    if(headShip == NULL){
-        headShip = this;
+    //configRush(1, moveFlag);
+    if (headShip == NULL) {
+        headShip = tailShip = this;
+        prevShip = nextShip = NULL;
+    } else {
+        prevShip = tailShip;
+        prevShip->nextShip = tailShip = this;
     }
+    nextShip = NULL;
 }
 
 EnemyShip::~EnemyShip()
 {
-    
     if (prevShip != NULL) {
         prevShip->nextShip = nextShip;
     }

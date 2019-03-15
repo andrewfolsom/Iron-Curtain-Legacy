@@ -72,6 +72,9 @@ extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);        
 extern void displayNick(float x, float y, GLuint texture);
 extern void displayChad(float x, float y, GLuint texture);
+EnemyShip *headShip = NULL;
+EnemyShip *tailShip = NULL;
+EnemyShip *eShip = NULL;
 extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
 extern void tracking(Missile *m, float *target, float t);
@@ -115,8 +118,7 @@ X11_wrapper x11;
 
 //Weapon *scnd = new Secondary;
 
-EnemyShip *headShip = NULL;
-EnemyShip *tailShip = NULL;
+EnemyShip *e = NULL;
 
 
 //Function Prototypes
@@ -283,16 +285,7 @@ int check_keys(XEvent *e)
                 s->wpn = new EnemyStd;
                 break;
             case XK_t:
-                spawnOpFor(gl.xres/2, gl.yres, 2);
-                spawnOpFor(gl.xres/4, gl.yres, 0);
-                spawnOpFor(gl.xres*.75, gl.yres, 1);
-                spawnOpFor(0, gl.yres, 4);
-                spawnOpFor(gl.xres/2, gl.yres, 3);
-                configOpFor(g.numOpFor, 700);
-                spawnOpFor(gl.xres/2, gl.yres, 3);
-                configOpFor(g.numOpFor, 0);
-
-
+                eShip = new EnemyShip(gl.xres / 2, 900, 0);
                 break;
 
         }
@@ -339,32 +332,26 @@ void physics()
         s->pos[1] = gl.yres - 20.0;
     }
 
-    EnemyShip *e = headShip;
-    //Update positions of all enemie ships
+    e = headShip;
+    //Update positions of all enemy ships
     while(e != NULL){
         e->updatePosition();
         e = e->nextShip;
     }
     
-    while(e != NULL){
-        if (e->pos[0] < 20.0) {
-            e->pos[0] = 20.0;
-            e->vel[3] = e->vel[0];
-            e->vel[0] = 0.0;
-        } else if (e->pos[0] > gl.xres - 20.0) {
-            e->pos[0] = gl.xres - 20;
-            e->vel[0] = e->vel[3];
-            e->vel[3] = 0.0;
-        } else if (e->pos[1] < 20.0) {
-            e->pos[1] = 20.0;
-        } else if (e->pos[1] > gl.yres - 20.0) {
-            e->pos[1] = gl.yres - 20.0;
-        }
+    if (headShip == NULL) {
+        std::cout << "Nothing" << std::endl;
+    } else {
+        std::cout<< headShip << std::endl;
     }
     
-        
-    
 
+    if (headShip != NULL && headShip->pos[1] < -20) {
+        e = headShip;
+        headShip = headShip->nextShip;        
+        delete e;
+    }
+    
     struct timespec bt;
     clock_gettime(CLOCK_REALTIME, &bt);
     int i = 0;

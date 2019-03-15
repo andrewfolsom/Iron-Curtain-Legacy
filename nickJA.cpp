@@ -14,6 +14,7 @@
 #include "chadM.h"
 extern Game g;
 extern Global gl;
+extern EnemyShip *headShip;
 //const int RUSH = 0;
 //const int STRAFE = 1;
 //const int CIRCLING = 2;
@@ -108,7 +109,7 @@ void updateRush(int iteration)
 //EnemyShip compatible.
 void EnemyShip::updateRush()
 {
-		pos[1] += (speedMul * moveFlag);
+	pos[1] += (speedMul * moveFlag);
 }
 //Speed affects movement speed of an object.
 //dir = Controls direction of vertical movement.
@@ -340,14 +341,12 @@ void updatePosition()
 //EnemyShip Compatible
 void EnemyShip::updatePosition()
 {
-
-	for (int i = 0; i <= g.numOpFor; i++) {
-		//opForShip *target = &g.opFor[i];
-		
-		switch (movPattern) {
+	EnemyShip *currShip = headShip;
+	while (currShip != NULL) {
+		switch (currShip->movPattern) {
 
 			case (RUSH):
-				updateRush();
+				currShip->updateRush();
 				break;
 
 			case (STRAFE):
@@ -366,6 +365,7 @@ void EnemyShip::updatePosition()
 				updateDiagRush();
 				break;
 		}
+		currShip = currShip->nextShip;
 	}
 
 }
