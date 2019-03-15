@@ -82,11 +82,7 @@ Image::~Image()
 /*
  * Global Class
  */
-Texture::Texture()
-{
-   float xc[2];
-   float yc[2]; 
-}    
+Texture::Texture() {}    
 
 
 Global::Global()
@@ -111,14 +107,13 @@ Ship::Ship() {
 	pos[0] = (Flt)(gl.xres/2);
 	pos[1] = (Flt)(100);
 	pos[2] = 1.0f;
-	//VecZero(vel);
 	vel[0] = (Flt)(0);
 	vel[1] = (Flt)(0);
 	vel[2] = (Flt)(0);
 	vel[3] = (Flt)(0);
-	radius = 25.0;
 	speed = 0.4;
 	color[0] = color[1] = color[2] = 1.0;
+	detRadius = 25.0;
 	wpn = new Basic;
     scnd = new Secondary;
 }

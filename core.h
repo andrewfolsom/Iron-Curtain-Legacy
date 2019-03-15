@@ -71,25 +71,9 @@ class Ship
 		float vel[4];
 		float speed;
 		float color[3];
-		float radius;
+		float detRadius;
 		Weapon *wpn;
 		Weapon *scnd;
-
-		//EDITS - Jackson
-		enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH };
-		Vec spawnPos;
-		float angle;
-		float angleSpd;
-		float t;
-		float destX, destY;
-		int speedMul = 1;
-		int initFlag = 0;
-		int moveFlag = -1;
-		int movPattern = RUSH;
-		int destOffset = 700;
-
-		//
-	public:
 		Ship();
 };
 

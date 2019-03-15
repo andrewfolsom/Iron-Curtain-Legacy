@@ -19,12 +19,8 @@
 #include <ctime>                                                             
 #include <cmath>                                                             
 #include <X11/Xlib.h>                                                        
-//#include <X11/Xutil.h>                                                     
-//#include <GL/gl.h>                                                         
-//#include <GL/glu.h>                                                        
 #include <X11/keysym.h>                                                      
 #include <GL/glx.h>                                                          
-//#include "log.h"
 #include "fonts.h"
 #include <stdio.h>
 #include "core.h"
@@ -54,7 +50,6 @@ const float gravity = -0.2f;
 const int MAX_BULLETS = 1000;
 const int MAX_MISSILES = 1;
 const float MAX_VELOCITY = 15;
-const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 float test[3] = {450.0, 900.0, 0.0};
 float radius = 8.0;
 float step = 0.0;
@@ -69,16 +64,16 @@ extern struct timespec timePause;
 extern double physicsCountdown;                                              
 extern double timeSpan;                                                      
 extern double timeDiff(struct timespec *start, struct timespec *end);        
-extern void timeCopy(struct timespec *dest, struct timespec *source);        
+extern void timeCopy(struct timespec *dest, struct timespec *source);
+//
 extern void displayNick(float x, float y, GLuint texture);
+//Externs -- Chad
+extern void renderShip(Ship ship);
 extern void displayChad(float x, float y, GLuint texture);
-EnemyShip *headShip = NULL;
-EnemyShip *tailShip = NULL;
-EnemyShip *eShip = NULL;
+
 extern void displayAndrew(float x, float y, GLuint texture);
 extern void displaySpencer(float x, float y, GLuint texture);
 extern void tracking(Missile *m, float *target, float t);
-extern void renderShip(Ship ship);
 extern void displayStartScreen();
 extern void scrollingBackground();
 //Externs -- Benjamin
@@ -118,7 +113,12 @@ X11_wrapper x11;
 
 //Weapon *scnd = new Secondary;
 
+EnemyShip *headShip = NULL;
+EnemyShip *tailShip = NULL;
+EnemyShip *eShip = NULL;
 EnemyShip *e = NULL;
+enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH};
+
 
 
 //Function Prototypes
@@ -285,7 +285,11 @@ int check_keys(XEvent *e)
                 s->wpn = new EnemyStd;
                 break;
             case XK_t:
-                eShip = new EnemyShip(gl.xres / 2, 900, 0);
+                eShip = new EnemyShip(gl.xres / 3, 900, RUSH);
+                eShip = new EnemyShip(gl.xres / 2, 900, STRAFE);
+                tailShip->configStrafe(10, 90, 5, 2, -1);
+                eShip = new EnemyShip(200, 900, CIRCLING);
+                tailShip->configCircle(30, 90, 3, 2, -1);
                 break;
 
         }
@@ -363,25 +367,26 @@ void physics()
 
     i = 0;
     e = headShip;
-    while (i < g.nmissiles) {
-        Missile *m = &g.marr[i];
-        d0 = e->pos[0] - m->pos[0];
-        d1 = e->pos[1] - m->pos[1];
-        dist = (d0*d0 + d1*d1);
-        if (dist < (radius * radius)) {
-            memcpy(&g.marr[i], &g.marr[g.nmissiles - 1], sizeof(Missile));
-            g.nmissiles--;
-            continue;
+    if (e != NULL) {
+        while (i < g.nmissiles) {
+            Missile *m = &g.marr[i];
+            d0 = e->pos[0] - m->pos[0];
+            d1 = e->pos[1] - m->pos[1];
+            dist = (d0*d0 + d1*d1);
+            if (dist < (radius * radius)) {
+                memcpy(&g.marr[i], &g.marr[g.nmissiles - 1], sizeof(Missile));
+                g.nmissiles--;
+                continue;
+            }
+
+            step += 0.01;
+            tracking(m, e->pos, step);
+
+            if (step > 1.0)
+                step = 0.0;
+            i++;
         }
-
-        step += 0.01;
-        tracking(m, e->pos, step);
-        //
-        if (step > 1.0)
-            step = 0.0;
-        i++;
     }
-
     //Collision with bullets?
     //If collision detected:
     //     1. delete the bullet
@@ -395,20 +400,19 @@ void physics()
             Flt d0 = b->pos[0] - e->pos[0];
             Flt d1 = b->pos[1] - e->pos[1];
             Flt dist = (d0*d0 + d1*d1);
-            if (dist < (e->radius*e->radius)) {
+            if (dist < (e->getRadius()*e->getRadius())) {
                 //delete the ship
-                //TODO add del function
-                //delete the bullet...
+                e->destroyShip();
+                //delete the bullet
                 memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
                 g.nbullets--;
-                if (e == NULL)
-                    break;
             }
 
             i++;
+            if (headShip == NULL) {
+                break;
+            }
         }
-        if (e == NULL)
-            break;
         e = e->nextShip;
     }
 
