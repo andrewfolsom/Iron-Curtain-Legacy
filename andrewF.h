@@ -86,12 +86,11 @@ public:
 	void fire();
 };
 
-class Missile
+class Missile : public Secondary
 {
 public:
 	float start[3];
 	float pos[3];
-	float color[3];
 	timespec time;
 public:
 	Missile();
