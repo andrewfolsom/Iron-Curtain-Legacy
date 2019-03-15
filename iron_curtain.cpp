@@ -338,13 +338,6 @@ void physics()
         e->updatePosition();
         e = e->nextShip;
     }
-    
-    if (headShip == NULL) {
-        std::cout << "Nothing" << std::endl;
-    } else {
-        std::cout<< headShip << std::endl;
-    }
-    
 
     if (headShip != NULL && headShip->pos[1] < -20) {
         e = headShip;
