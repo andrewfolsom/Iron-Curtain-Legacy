@@ -341,12 +341,10 @@ void updatePosition()
 //EnemyShip Compatible
 void EnemyShip::updatePosition()
 {
-	EnemyShip *currShip = headShip;
-	while (currShip != NULL) {
-		switch (currShip->movPattern) {
+		switch (movPattern) {
 
 			case (RUSH):
-				currShip->updateRush();
+				updateRush();
 				break;
 
 			case (STRAFE):
@@ -365,7 +363,4 @@ void EnemyShip::updatePosition()
 				updateDiagRush();
 				break;
 		}
-		currShip = currShip->nextShip;
-	}
-
 }
