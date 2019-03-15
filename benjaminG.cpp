@@ -176,5 +176,41 @@ void displayErrorScreen() {
     ggprint16(&r, 16,c," ");
 }
 
+/*
+void genTexture(GLuint &imgID, int imgIndex) {
+    glBindTexture(GL_TEXTURE_2D, imgID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3,img[imgIndex].width,img[imgIndex].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[imgIndex].data);
+}
 
 
+void genCreditTextures() {
+    for (int i = 0; i < 5; i++) {
+        int w = img[i].width;
+        int h = img[i].height;
+        switch (i) {
+            case 0:
+                glBindTexture(GL_TEXTURE_2D, gl.nickImage);
+                break;
+            case 1:
+                glBindTexture(GL_TEXTURE_2D, gl.andrewImage);
+                break;
+            case 2:
+                glBindTexture(GL_TEXTURE_2D, gl.spencerImage);
+                break;
+            case 3:
+                glBindTexture(GL_TEXTURE_2D, gl.chadImage);
+                break;
+            case 4:
+                glBindTexture(GL_TEXTURE_2D, gl.benImage);
+                break;
+            default:
+                cout << "Error: genTextures\n";
+        }
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img[i].data);
+    }
+}
+*/
