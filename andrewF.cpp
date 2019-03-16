@@ -381,3 +381,36 @@ Upgrade::Upgrade()
     bulletSpeed = 5.0;
     color[0] = color[1] = color[2] = 1.0;
 }
+
+Shield::Shield()
+{
+	angle = 0.0;
+	increment = 30.0;
+	radius = 60.0;
+	color[0] = 1.0;
+	color[1] = 0.5;
+	color[2] = 0.25;
+	status = false;
+}
+
+// Render function for shield
+void Shield::drawShield(float *pos) {	
+	glPushMatrix();
+	glTranslatef(pos[0], pos[1], pos[2]);
+	glColor3f(color[0],color[1],color[2]);
+	glLineWidth(2.0f);
+	glBegin(GL_LINE_LOOP);
+	for (int i = 0; i < 12; i++) {
+		x = radius * cos(convertToRads(angle + (i*increment)));
+		y = radius * sin(convertToRads(angle + (i*increment)));
+		glVertex3f(x, y, 0.0);
+	}
+	glEnd();
+	glPopMatrix();
+
+	if (angle < 90) {
+		angle += 2.0;
+	} else {
+		angle = 0.0;
+	}
+}

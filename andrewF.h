@@ -111,4 +111,18 @@ class Upgrade : public Basic {
     public:
         Upgrade();
 };
+
+class Shield
+{
+	public:
+		float angle;
+		float increment;
+		float radius;
+		float x, y;
+		float color[3];
+		bool status;
+	public:
+		Shield();
+		void drawShield(float* pos);
+};
 #endif

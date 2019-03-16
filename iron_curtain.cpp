@@ -71,9 +71,11 @@ extern void displayNick(float x, float y, GLuint texture);
 extern void renderShip(Ship ship);
 extern void displayChad(float x, float y, GLuint texture);
 
+//Externs -- Andrew
 extern void displayAndrew(float x, float y, GLuint texture);
-extern void displaySpencer(float x, float y, GLuint texture);
 extern void tracking(Missile *m, float *target, float t);
+
+extern void displaySpencer(float x, float y, GLuint texture);
 extern void displayStartScreen();
 extern void scrollingBackground();
 //Externs -- Benjamin
@@ -284,6 +286,9 @@ int check_keys(XEvent *e)
                 delete s->wpn;
                 s->wpn = new EnemyStd;
                 break;
+	    	case XK_b:
+				s->shield->status = !s->shield->status;
+				break;
             case XK_t:
                 eShip = new EnemyShip(gl.xres / 3, 900, RUSH);
                 eShip = new EnemyShip(gl.xres / 2, 900, STRAFE);
@@ -541,6 +546,9 @@ void render()
         //Draw ships
         
         renderShip(g.ship);
+		if (g.ship.shield->status)
+			g.ship.shield->drawShield(g.ship.pos);
+
         EnemyShip *e = headShip;
         while(e != NULL){
             renderShip(*e);
