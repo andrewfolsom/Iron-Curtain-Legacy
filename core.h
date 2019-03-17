@@ -78,9 +78,33 @@ class Ship
 };
 
 /*
- *OPFOR Class
+ * Tank Class
  *	Jackson
  */
+class Tank
+{
+	public:
+		float pos[3];
+		Vec vel = {0, 0, 0};
+		float color[3] = {0.33, 0.42, 0.18};
+		Tank();
+
+		class Turret
+		{
+			public:
+			float tPos[3];
+			Vec tgt;
+			float tColor[3] = {0.33,0.5,0.18};
+			Weapon *prm;
+
+			void renderTurret();
+		}turret;
+};
+
+/*
+ *OPFOR Class
+ *	Jackson
+ ** DEPRECATED **
 class opForShip
 {
     public:
@@ -102,6 +126,7 @@ class opForShip
 	opForShip(const opForShip&);
 	opForShip& operator= (const opForShip&);
 };
+*/
 
 /*
  * Bullet Class
@@ -126,6 +151,7 @@ class Game
 {
     public:
 	Ship ship;
+	Tank testTank;
 	Bullet *barr;
 	Missile *marr;
 	int nbullets;
@@ -137,8 +163,8 @@ class Game
 	bool thrustOn;
 	//-----------------------------
 	//Jackson
-	opForShip opFor[100];
-	int numOpFor;
+	//opForShip opFor[100];
+	//int numOpFor;
 	//------------------------------
     public:
 	Game();

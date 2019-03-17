@@ -87,10 +87,13 @@ extern void displayErrorScreen();
 
 //Externs -- Jackson
 extern void displayNick(float x, float y, GLuint texture);
+extern void renderTank(Tank tank);
+/* ** DEPRECATED **
 extern void spawnOpFor(int x, int y, int movType);
 extern void renderOpFor();
 extern void updatePosition();
 extern void configOpFor(int ID, int destOffSet);
+*/
 //-------------------------------------------------------------------------- 
 
 Image img[7] = {
@@ -148,7 +151,6 @@ int main()
 		physicsCountdown += timeSpan;
 		while (physicsCountdown >= physicsRate) {
 			physics();
-			updatePosition();
 			physicsCountdown -= physicsRate;
 		}
 		render();
@@ -291,6 +293,8 @@ int check_keys(XEvent *e)
                 eShip = new EnemyShip(200, 900, CIRCLING);
                 tailShip->configCircle(30, 90, 3, 2, -1);
                 break;
+			case XK_z:
+				break;
 
         }
     }
@@ -406,6 +410,7 @@ void physics()
                 //delete the bullet
                 memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
                 g.nbullets--;
+				break;
             }
 
             i++;
@@ -546,11 +551,9 @@ void render()
             renderShip(*e);
             e = e->nextShip;
         }
+		//Draw Tank
+		renderTank(g.testTank);
         
-
-        //Draw enemy ships
-        renderOpFor();
-
         for (int i = 0; i < g.nbullets; i++) {
             Bullet *b = &g.barr[i];
             glColor3fv(b->color);

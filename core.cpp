@@ -121,17 +121,29 @@ Ship::Ship() {
 /*
  * OpFor Class
  *	Jackson
- */
+ ** DEPRECATED **
 opForShip::opForShip() {
 
 }
-/*
+
 opForShip::opForShip(const opForShip& target) {
 	memcpy(pos, target.pos, 3);
 	memcpy(vel, target.vel, 4);
 	memcpy(color, target.color, 3);
 }
 */
+
+/*
+ * Tank Class
+ *	Jackson
+ */
+Tank::Tank() { 
+	pos[0] = gl.xres/2;
+	pos[1] = gl.yres/2;
+	turret.tPos[0] = pos[0];
+	turret.tPos[1] = pos[1];
+};
+
 /*
  * Bullet Class
  */

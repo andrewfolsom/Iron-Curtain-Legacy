@@ -53,6 +53,7 @@ void displayNick(float x, float y, GLuint texture)
 //SPAWN
 //X & Y are spawn Coordinates
 //movType acts as a flag to define movement behavior.
+/* ** DEPRECATED **
 void spawnOpFor(int x, int y, int movType) 
 {
 	opForShip *newGuy = &g.opFor[g.numOpFor];
@@ -95,22 +96,27 @@ void configOpFor(int ID, int destOffset)
 	Edit->destOffset = destOffset;
 
 }
+*/
 
 //MOVEMENT TYPES
 //Press 't' to test this mid game.
 //1 - Rush
 //Enemy begins at the top of the screen and rushes straight to the bottom.
 //Iteration will be used to identify which entity to update the position of.
+/* ** DEPRECATED **
 void updateRush(int iteration)
 {
 	opForShip *move = &g.opFor[iteration];
 	move->pos[1] -= move->speedMul;
 }
+*/
 //EnemyShip compatible.
 void EnemyShip::updateRush()
 {
 	pos[1] += (speedMul * moveFlag);
 }
+
+
 //Speed affects movement speed of an object.
 //dir = Controls direction of vertical movement.
 //		1 = move UP, 0 = NO MOVEMENT, -1 = move DOWN
@@ -125,6 +131,7 @@ void EnemyShip::configRush(float speed, int dir)
 //2 - Strafing
 //Enemy Oscillates between two points while moving to the bottom of the screen.
 //Iteration will be used to identify which entity to update the position of.
+/* ** DEPRECATED **
 void updateStrafe(int iteration)
 {
 	opForShip *move = &g.opFor[iteration];
@@ -133,6 +140,8 @@ void updateStrafe(int iteration)
 	move->pos[0] = 10*cos(move->angle);
 	move->angle+= 0.1;
 }
+*/
+
 //EnemyShip compatible..
 void EnemyShip::updateStrafe()
 {
@@ -141,6 +150,7 @@ void EnemyShip::updateStrafe()
 	pos[0] = spawnPos[0] + radius*cos((angle*PI)/180);
 	angle  += angleSpd;
 }
+
 //rad = outer bound of strafe.
 //angleSet = initial angle, affects initial position of object. 
 //			 generally 90 will keep object at initial position.
@@ -148,7 +158,6 @@ void EnemyShip::updateStrafe()
 //speed = speedMul for object's vertical movement
 //dir = Controls direction of vertical movement.
 //		1 = move UP, 0 = NO MOVEMENT, -1 = move DOWN
-
 void EnemyShip::configStrafe(float rad, float angleSet, float angleSpeed, float speed, int dir)
 {
 	spawnPos[0] = pos[0];
@@ -166,6 +175,7 @@ void EnemyShip::configStrafe(float rad, float angleSet, float angleSpeed, float 
 //Enemy follows the path of a circle whose center is consistently moving
 //towards the bottom of the screen.
 //Iteration will be used to identify which entity to update the position of.
+/* ** DEPRECATED **
 void updateCircle(int iteration) 
 {
 	opForShip *move = &g.opFor[iteration];
@@ -175,6 +185,7 @@ void updateCircle(int iteration)
 
 	move->angle+= 0.1;
 }
+*/
 //EnemyShip compatible
 void EnemyShip::updateCircle() 
 {
@@ -209,6 +220,7 @@ void EnemyShip::configCircle(float rad, float angleSet, float angleSpeed, float 
 //4 - Bank
 //Enemy follows a curve while moving from the top to bottom of the screen.
 //Iteration will be used to identify which entity to update the position of.
+/* ** DEPRECATED **
 void updateBank(int iteration)
 {
 	opForShip *move = &g.opFor[iteration];
@@ -234,6 +246,9 @@ void updateBank(int iteration)
 
 	//printf("Opfor %i at (%f, %f)\n", g.numOpFor, move->pos[0], move->pos[1]);
 }
+*/
+
+
 //EnemyShip compatible
 void EnemyShip::updateBank()
 {
@@ -277,6 +292,7 @@ void EnemyShip::configBank(float x, float y, float speed)
 
 //5 - Diagonal Rush
 //Enemy will follow a diagonal line from its spawn to the bottom of the screen.
+/* ** DEPRECATED **
 void updateDiagRush(int iteration)
 {
 	opForShip *move = &g.opFor[iteration];
@@ -284,6 +300,8 @@ void updateDiagRush(int iteration)
 	move->pos[1] -= move->speedMul;
 	move->pos[0] = (move->pos[1]-1000)/-1.13;
 }
+*/
+
 //EnemyShip Compatible
 void EnemyShip::updateDiagRush()
 {
@@ -292,6 +310,7 @@ void EnemyShip::updateDiagRush()
 
 	printf("Angle is %f, x is %f, y is %f\n", angle, pos[0], pos[1]);
 }
+
 
 void EnemyShip::configDiagRush(float x, float y, float speed)
 {
@@ -306,9 +325,9 @@ void EnemyShip::configDiagRush(float x, float y, float speed)
 //Movement Function
 //Function uses a switch case to determine what function should be applied to
 //each entity in the OpFor array.
+/* ** DEPRECATED **
 void updatePosition()
 {
-
 	for (int i = 0; i <= g.numOpFor; i++) {
 		opForShip *target = &g.opFor[i];
 		
@@ -335,8 +354,8 @@ void updatePosition()
 				break;
 		}
 	}
-
 }
+*/
 
 //EnemyShip Compatible
 void EnemyShip::updatePosition()
@@ -363,4 +382,70 @@ void EnemyShip::updatePosition()
 				updateDiagRush();
 				break;
 		}
+}
+
+
+//============================================
+//				TANK MOVEMENT
+//============================================
+
+void Tank::Turret::renderTurret()
+{
+	Vec pt[50];
+	float angle = 0;
+	float angleInc = (2*PI)/50;
+	
+	//Draw Gun
+	glColor3f(0.0, 0.0, 0.1);
+	glPushMatrix();
+	glTranslatef(tPos[0], tPos[1], .5);
+	glBegin(GL_QUADS);
+		glVertex2f(-2.5, 0.0);
+		glVertex2f( 2.5, 0.0);
+		glVertex2f( 2.5, 100);
+		glVertex2f(-2.5, 100);
+	glEnd();
+	glPopMatrix();
+
+	//Create points to draw turret.
+	for (int i = 0; i < 50; i++)
+	{
+		pt[i][0] = tPos[0] + (25 * cos(angle));
+		pt[i][1] = tPos[1] + (25 * sin(angle));
+		angle += angleInc;
+	}
+
+	//Draw Turret
+	glColor3fv(tColor);
+	glPushMatrix();
+	//glTranslatef(tPos[0], tPos[1], 1.0);
+	glBegin(GL_TRIANGLE_FAN);
+		glVertex3f(tPos[0], tPos[1], 1.0);
+		for (int j = 0; j < 50; j++)
+		{
+			glVertex3f(pt[j][0], pt[j][1], 1.0);
+		}
+		glVertex3f(pt[0][0], pt[0][1], 1.0);
+	glEnd();
+	glPopMatrix();
+}
+
+void renderTank(Tank tank) 
+{
+
+	glColor3fv(tank.color);
+	glPushMatrix();
+	//glTranslatef(tank.pos[0], tank.pos[1], 0.0);
+	glTranslatef(tank.pos[0], tank.pos[1], 0.1);
+	glBegin(GL_QUADS);
+		glVertex2f(-30, -45);
+		glVertex2f( 30, -45);
+		glVertex2f( 30,  45);
+		glVertex2f(-30,  45);
+	glEnd();
+	glPopMatrix();
+
+	tank.turret.renderTurret();
+
+	//printf("Pos is (%f, %f)\n", tank.turret.tPos[0], tank.turret.tPos[1]);
 }
