@@ -394,6 +394,10 @@ void Tank::renderTurret()
 	Vec pt[50];
 	float angle = 0;
 	float angleInc = (2*PI)/50;
+	//tAngle is the current angle of the turret.
+	//tgtAngle is the angle it needs to reach to aim at the target.
+	//Increment number controls turret speed. At 0.25, the turret rotates
+	//at around 15 degrees per second.
 	if (tAngle != tgtAngle) {
 		if (tAngle > tgtAngle) {
 			tAngle -= 0.25;
@@ -441,7 +445,8 @@ void Tank::renderTurret()
 	glPopMatrix();
 	//printf("tgtAngle is %f, tAngle is %f\n", tgtAngle, tAngle);
 }
-
+//Function is fed an X, Y value to target.
+//Is suppled with cursor Coord in iron-curtain.cpp
 void Tank::updateTarget(int x, int y)
 {
 	tgt[0] = x;
