@@ -140,8 +140,8 @@ opForShip::opForShip(const opForShip& target) {
 Tank::Tank() { 
 	pos[0] = gl.xres/2;
 	pos[1] = gl.yres/2;
-	turret.tPos[0] = pos[0];
-	turret.tPos[1] = pos[1];
+	tPos[0] = pos[0];
+	tPos[1] = pos[1];
 };
 
 /*

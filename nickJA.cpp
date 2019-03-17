@@ -389,16 +389,26 @@ void EnemyShip::updatePosition()
 //				TANK MOVEMENT
 //============================================
 
-void Tank::Turret::renderTurret()
+void Tank::renderTurret()
 {
 	Vec pt[50];
 	float angle = 0;
 	float angleInc = (2*PI)/50;
+	if (tAngle != tgtAngle) {
+		if (tAngle > tgtAngle) {
+			tAngle -= 0.25;
+		}
+		else { 
+			tAngle += 0.25;
+		}
+		//printf("Called %i times", calledCount);
+	}
 	
 	//Draw Gun
 	glColor3f(0.0, 0.0, 0.1);
 	glPushMatrix();
 	glTranslatef(tPos[0], tPos[1], .5);
+	glRotatef(tAngle, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_QUADS);
 		glVertex2f(-2.5, 0.0);
 		glVertex2f( 2.5, 0.0);
@@ -419,6 +429,7 @@ void Tank::Turret::renderTurret()
 	glColor3fv(tColor);
 	glPushMatrix();
 	//glTranslatef(tPos[0], tPos[1], 1.0);
+	//glRotatef(tAngle, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_TRIANGLE_FAN);
 		glVertex3f(tPos[0], tPos[1], 1.0);
 		for (int j = 0; j < 50; j++)
@@ -428,15 +439,28 @@ void Tank::Turret::renderTurret()
 		glVertex3f(pt[0][0], pt[0][1], 1.0);
 	glEnd();
 	glPopMatrix();
+	//printf("tgtAngle is %f, tAngle is %f\n", tgtAngle, tAngle);
 }
 
-void renderTank(Tank tank) 
+void Tank::updateTarget(int x, int y)
+{
+	tgt[0] = x;
+	tgt[1] = y;
+	tgtAngle = atan((tgt[0] - tPos[0])/(tgt[1] - tPos[1]));
+	if (tgt[1] - tPos[1] < 0)
+		tgtAngle = (tgtAngle * 180) /PI;
+	else
+		tgtAngle = 180 + (tgtAngle * 180) /PI;
+	//printf("Target Location is (%f, %f)\n", turret.tgt[0], turret.tgt[1]);
+}
+
+void Tank::renderTank() 
 {
 
-	glColor3fv(tank.color);
+	glColor3fv(color);
 	glPushMatrix();
 	//glTranslatef(tank.pos[0], tank.pos[1], 0.0);
-	glTranslatef(tank.pos[0], tank.pos[1], 0.1);
+	glTranslatef(pos[0], pos[1], 0.1);
 	glBegin(GL_QUADS);
 		glVertex2f(-30, -45);
 		glVertex2f( 30, -45);
@@ -445,7 +469,7 @@ void renderTank(Tank tank)
 	glEnd();
 	glPopMatrix();
 
-	tank.turret.renderTurret();
+	renderTurret();
 
 	//printf("Pos is (%f, %f)\n", tank.turret.tPos[0], tank.turret.tPos[1]);
 }

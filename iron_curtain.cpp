@@ -66,7 +66,6 @@ extern double timeSpan;
 extern double timeDiff(struct timespec *start, struct timespec *end);        
 extern void timeCopy(struct timespec *dest, struct timespec *source);
 //
-extern void displayNick(float x, float y, GLuint texture);
 //Externs -- Chad
 extern void renderShip(Ship ship);
 extern void displayChad(float x, float y, GLuint texture);
@@ -128,9 +127,10 @@ enum MOVETYPE { RUSH, STRAFE, CIRCLING, BANK, DIAG_RUSH};
 double getTimeSlice(timespec* bt);
 float convertToRads(float angle);
 void init_opengl(void);
-int check_keys(XEvent *e);
 void physics();
 void render();
+void check_mouse(XEvent *e);
+int check_keys(XEvent *e);
 
 int main()
 {
@@ -143,6 +143,7 @@ int main()
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
+			check_mouse(&e);
 			done = check_keys(&e);
 		}
 		clock_gettime(CLOCK_REALTIME, &timeCurrent);
@@ -207,6 +208,21 @@ void normalize2d(Vec v)
     len = 1.0f / sqrt(len);
     v[0] *= len;
     v[1] *= len;
+}
+//CHECK MOUSE
+void check_mouse(XEvent *e)
+{
+	static int savex = 0;
+	static int savey = 0;
+	static int lbuttonDown = 0;
+	static int rbuttonDown = 0;
+	//If mouse moves, save new position.
+	//Update testTank's Target.
+	if (savex != e->xbutton.x || savey != e->xbutton.y) {
+		savex = e->xbutton.x;
+		savey = e->xbutton.y;
+		g.testTank.updateTarget(savex, savey);
+	}
 }
 
 int check_keys(XEvent *e)
@@ -294,6 +310,10 @@ int check_keys(XEvent *e)
                 tailShip->configCircle(30, 90, 3, 2, -1);
                 break;
 			case XK_z:
+				g.testTank.tAngle++;
+				break;
+			case XK_x:
+				g.testTank.tAngle--;
 				break;
 
         }
@@ -552,7 +572,7 @@ void render()
             e = e->nextShip;
         }
 		//Draw Tank
-		renderTank(g.testTank);
+		g.testTank.renderTank();
         
         for (int i = 0; i < g.nbullets; i++) {
             Bullet *b = &g.barr[i];

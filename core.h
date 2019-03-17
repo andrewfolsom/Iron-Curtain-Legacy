@@ -85,20 +85,21 @@ class Tank
 {
 	public:
 		float pos[3];
-		Vec vel = {0, 0, 0};
+		float tPos[3];
 		float color[3] = {0.33, 0.42, 0.18};
+		float tAngle;
+		float tgtAngle;
+		float tColor[3] = {0.33,0.5,0.18};
+		Vec vel = {0, 0, 0};
+		Vec tgt;
 		Tank();
 
-		class Turret
-		{
-			public:
-			float tPos[3];
-			Vec tgt;
-			float tColor[3] = {0.33,0.5,0.18};
-			Weapon *prm;
+		Weapon *prm;
 
-			void renderTurret();
-		}turret;
+
+		void renderTurret();
+		void renderTank();
+		void updateTarget(int x, int y);
 };
 
 /*
