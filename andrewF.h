@@ -86,11 +86,21 @@ public:
 	void fire();
 };
 
+struct Reticle
+{
+	float pos[3];
+	float seekColor[3];
+	float lockColor[3];
+	float angle;
+};
+
 class Missile : public Secondary
 {
 public:
 	float start[3];
 	float pos[3];
+	bool armed;
+	Reticle reticle;
 	timespec time;
 public:
 	Missile();

@@ -315,7 +315,17 @@ void Secondary::fire()
 /**
  * Missile object constructor
  */
-Missile::Missile() { }
+Missile::Missile()
+{
+	reticle.seekColor[0] = 0.5;
+	reticle.seekColor[1] = 0.5;
+	reticle.seekColor[2] = 1.0;
+	reticle.lockColor[0] = 1.0;
+	reticle.lockColor[1] = 0.0;
+	reticle.lockColor[2] = 0.0;
+	reticle.angle = 0.0;
+	armed = false;
+}
 
 /**
  * Updates objects position so that it continually moves towards
