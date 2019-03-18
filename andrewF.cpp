@@ -64,29 +64,6 @@ void angularAdjustment(float *vel, float angle)
     vel[1] = vel[1] * sin(convertToRads(angle));
 }
 
-/**
- * Updates objects position so that it continually moves towards
- * the target.
- * @param m      Missile object to be moved
- * @param target Array containing targets X/Y coordinates
- * @param t      Time value for the Bezier curve
- */
-void tracking(Missile *m, float *target, float t)
-{
-    float mid[3] = {0.0, 0.0, 0.0};
-    if (m->start[0] < 500.0)
-        mid[1] = m->start[1];
-
-    if (m->start[0] > 500.0) {
-        mid[0] = 900.0;
-        mid[1] = m->start[1];
-    }
-
-    m->pos[0] = (pow(1 - t, 2.0) * m->start[0]) + (2 * (1 - t) * t * mid[0]
-        ) + (pow(t, 2.0) * target[0]);
-    m->pos[1] = (pow(1 - t, 2.0) * m->start[1]) + (2 * (1 - t) * t * mid[1]
-        ) + (pow(t, 2.0) * target[1]);
-}
 
 //===========================================================
 //    DEFINITION OF WEAPON CLASS AND IT'S DERIVED CLASSES
@@ -339,6 +316,30 @@ void Secondary::fire()
  * Missile object constructor
  */
 Missile::Missile() { }
+
+/**
+ * Updates objects position so that it continually moves towards
+ * the target.
+ * @param m      Missile object to be moved
+ * @param target Array containing targets X/Y coordinates
+ * @param t      Time value for the Bezier curve
+ */
+void Missile::tracking(float *target, float t)
+{
+    float mid[3] = {0.0, 0.0, 0.0};
+    if (start[0] < 500.0)
+        mid[1] = start[1];
+
+    if (start[0] > 500.0) {
+        mid[0] = 900.0;
+        mid[1] = start[1];
+    }
+
+    pos[0] = (pow(1 - t, 2.0) * start[0]) + (2 * (1 - t) * t * mid[0]
+        ) + (pow(t, 2.0) * target[0]);
+    pos[1] = (pow(1 - t, 2.0) * start[1]) + (2 * (1 - t) * t * mid[1]
+        ) + (pow(t, 2.0) * target[1]);
+}
 
 /**
  * Standard Enemy Weapon constructor

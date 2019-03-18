@@ -94,6 +94,7 @@ public:
 	timespec time;
 public:
 	Missile();
+	void tracking(float *, float);
 };
 
 //Added Lab 8 03/14/2019

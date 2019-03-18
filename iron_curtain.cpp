@@ -73,7 +73,6 @@ extern void displayChad(float x, float y, GLuint texture);
 
 //Externs -- Andrew
 extern void displayAndrew(float x, float y, GLuint texture);
-extern void tracking(Missile *m, float *target, float t);
 
 extern void displaySpencer(float x, float y, GLuint texture);
 extern void displayStartScreen();
@@ -385,7 +384,7 @@ void physics()
             }
 
             step += 0.01;
-            tracking(m, e->pos, step);
+            m->tracking(e->pos, step);
 
             if (step > 1.0)
                 step = 0.0;
