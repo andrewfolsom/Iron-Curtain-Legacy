@@ -278,6 +278,14 @@ Secondary::Secondary()
     color[0] = 1.5;
     color[1] = 0.5;
     color[2] = 1.0;
+	reticle.seekColor[0] = 0.5;
+	reticle.seekColor[1] = 0.5;
+	reticle.seekColor[2] = 1.0;
+	reticle.lockColor[0] = 1.0;
+	reticle.lockColor[1] = 0.0;
+	reticle.lockColor[2] = 0.0;
+	reticle.angle = 0.0;
+	reticle.armed = false;
 }
 
 /**
@@ -315,17 +323,7 @@ void Secondary::fire()
 /**
  * Missile object constructor
  */
-Missile::Missile()
-{
-	reticle.seekColor[0] = 0.5;
-	reticle.seekColor[1] = 0.5;
-	reticle.seekColor[2] = 1.0;
-	reticle.lockColor[0] = 1.0;
-	reticle.lockColor[1] = 0.0;
-	reticle.lockColor[2] = 0.0;
-	reticle.angle = 0.0;
-	armed = false;
-}
+Missile::Missile() { }
 
 /**
  * Updates objects position so that it continually moves towards

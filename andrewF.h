@@ -76,22 +76,25 @@ public:
 	void fire();
 };
 
-// Secondary Weapon Declarations
-
-class Secondary : public Basic
-{
-public:
-	Secondary();
-	void setVelocity(float*);
-	void fire();
-};
-
 struct Reticle
 {
 	float pos[3];
 	float seekColor[3];
 	float lockColor[3];
 	float angle;
+	bool armed;
+};
+
+// Secondary Weapon Declarations
+
+class Secondary : public Basic
+{
+public:
+	Reticle reticle;
+public:
+	Secondary();
+	void setVelocity(float*);
+	void fire();
 };
 
 class Missile : public Secondary
@@ -99,8 +102,6 @@ class Missile : public Secondary
 public:
 	float start[3];
 	float pos[3];
-	bool armed;
-	Reticle reticle;
 	timespec time;
 public:
 	Missile();

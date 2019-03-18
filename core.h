@@ -73,7 +73,7 @@ class Ship
 		float color[3];
 		float detRadius;
 		Weapon *wpn;
-		Weapon *scnd;
+		Secondary *scnd;
 		Shield *shield;
 		Ship();
 };

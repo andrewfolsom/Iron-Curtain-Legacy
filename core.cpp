@@ -115,7 +115,7 @@ Ship::Ship() {
 	color[0] = color[1] = color[2] = 1.0;
 	detRadius = 25.0;
 	wpn = new Basic;
-    	scnd = new Secondary;
+    scnd = new Secondary;
 	shield = new Shield;
 }
 

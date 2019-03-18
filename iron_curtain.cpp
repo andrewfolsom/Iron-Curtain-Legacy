@@ -288,6 +288,11 @@ int check_keys(XEvent *e)
 	    	case XK_b:
 				s->shield->status = !s->shield->status;
 				break;
+			case XK_Shift_R:
+				if (headShip != NULL) {
+					VecCopy(headShip->pos, s->scnd->reticle.pos);
+				}
+				break;
             case XK_t:
                 eShip = new EnemyShip(gl.xres / 3, 900, RUSH);
                 eShip = new EnemyShip(gl.xres / 2, 900, STRAFE);
