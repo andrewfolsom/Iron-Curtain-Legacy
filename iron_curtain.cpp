@@ -395,8 +395,8 @@ void physics()
     if (e != NULL) {
         while (i < g.nmissiles) {
             Missile *m = &g.marr[i];
-            d0 = e->pos[0] - m->pos[0];
-            d1 = e->pos[1] - m->pos[1];
+            d0 = s->scnd->reticle.e->pos[0] - m->pos[0];
+            d1 = s->scnd->reticle.e->pos[1] - m->pos[1];
             dist = (d0*d0 + d1*d1);
             if (dist < (radius * radius)) {
                 memcpy(&g.marr[i], &g.marr[g.nmissiles - 1], sizeof(Missile));
@@ -405,7 +405,7 @@ void physics()
             }
 
             step += 0.01;
-            m->tracking(e->pos, step);
+            m->tracking(s->scnd->reticle.e->pos, step);
 
             if (step > 1.0)
                 step = 0.0;
