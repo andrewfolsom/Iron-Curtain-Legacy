@@ -4,6 +4,7 @@
 #include "fonts.h"
 #include "andrewF.h"
 #include "core.h"
+#include "chadM.h"
 
 #define VecDot(a,b) ((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
 #define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0];(c)[1]=(a)[1]-(b)[1];\
@@ -15,6 +16,7 @@ extern float convertToRads(float angle);
 extern double getTimeSlice(timespec*);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
 extern Game g;
+extern EnemyShip* headShip;
 
 /**
  * Displays my picture and name
@@ -269,6 +271,72 @@ void Pinwheel::fire()
 }
 
 /**
+ * Reticle seek function
+ */
+void Reticle::seek()
+{
+    if (e->nextShip != NULL)
+        e = e->nextShip;
+}
+
+/**
+ * Function to update position of reticle
+ */
+void Reticle::update()
+{
+    pos[0] = e->pos[0];
+    pos[1] = e->pos[1];
+    pos[2] = e->pos[2];
+}
+
+/**
+ * Reticle rendering function
+ */
+void Reticle::drawReticle(bool lock)
+{
+    int x, y;
+    if (!lock) {
+        glPushMatrix();
+	    glTranslatef(pos[0], pos[1], pos[2]);
+	    glColor3f(seekColor[0],seekColor[1],seekColor[2]);
+	    glLineWidth(2.0f);
+	    glBegin(GL_LINE_LOOP);
+	    for (int i = 0; i < 120; i++) {
+		    x = 40 * cos(convertToRads(angle + (i*3)));
+		    y = 40 * sin(convertToRads(angle + (i*3)));
+		    glVertex3f(x, y, 0.0);
+	    }
+	    glEnd();
+	    glPopMatrix();
+
+	    if (angle < 90) {
+		    angle += 2.0;
+	    } else {
+		    angle = 0.0;
+	    }
+    } else {
+        glPushMatrix();
+	    glTranslatef(pos[0], pos[1], pos[2]);
+	    glColor3f(lockColor[0],lockColor[1],lockColor[2]);
+	    glLineWidth(2.0f);
+	    glBegin(GL_LINE_LOOP);
+	    for (int i = 0; i < 120; i++) {
+		    x = 40 * cos(convertToRads(angle + (i*3)));
+		    y = 40 * sin(convertToRads(angle + (i*3)));
+		    glVertex3f(x, y, 0.0);
+	    }
+	    glEnd();
+	    glPopMatrix();
+
+	    if (angle < 90) {
+		    angle += 2.0;
+	    } else {
+		    angle = 0.0;
+	    }
+    }
+}
+
+/**
  * Secondary weapon class constructor
  */
 Secondary::Secondary()
@@ -285,7 +353,8 @@ Secondary::Secondary()
 	reticle.lockColor[1] = 0.0;
 	reticle.lockColor[2] = 0.0;
 	reticle.angle = 0.0;
-	reticle.armed = false;
+	armed = false;
+    locked = false;
 }
 
 /**

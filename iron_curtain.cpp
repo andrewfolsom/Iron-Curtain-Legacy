@@ -259,6 +259,7 @@ int check_keys(XEvent *e)
                 return 1;
 
             case XK_m:
+                s->scnd->locked = true;
                 gl.keys[XK_m] = 1;
                 break;
             case XK_1:
@@ -289,10 +290,20 @@ int check_keys(XEvent *e)
 				s->shield->status = !s->shield->status;
 				break;
 			case XK_Shift_R:
-				if (headShip != NULL) {
-					VecCopy(headShip->pos, s->scnd->reticle.pos);
-				}
+                if (headShip != NULL) {
+			        s->scnd->armed = true;
+                    s->scnd->reticle.e = headShip;
+                    s->scnd->reticle.update();
+                }
 				break;
+            case XK_period:
+                if (s->scnd->reticle.e->nextShip != NULL)
+                    s->scnd->reticle.e = s->scnd->reticle.e->nextShip;
+                break;
+            case XK_comma:
+                if (s->scnd->reticle.e->prevShip != NULL)
+                    s->scnd->reticle.e = s->scnd->reticle.e->prevShip;
+                break;
             case XK_t:
                 eShip = new EnemyShip(gl.xres / 3, 900, RUSH);
                 eShip = new EnemyShip(gl.xres / 2, 900, STRAFE);
@@ -356,6 +367,11 @@ void physics()
         e = headShip;
         headShip = headShip->nextShip;        
         delete e;
+    }
+
+    // Update position of reticle
+    if (s->scnd->armed) {
+        s->scnd->reticle.update();
     }
     
     struct timespec bt;
@@ -558,7 +574,9 @@ void render()
             renderShip(*e);
             e = e->nextShip;
         }
-        
+
+        if (g.ship.scnd->armed)
+            g.ship.scnd->reticle.drawReticle(g.ship.scnd->locked);
 
         //Draw enemy ships
         renderOpFor();

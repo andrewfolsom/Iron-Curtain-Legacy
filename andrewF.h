@@ -76,13 +76,18 @@ public:
 	void fire();
 };
 
+class EnemyShip;
+
 struct Reticle
 {
 	float pos[3];
 	float seekColor[3];
 	float lockColor[3];
 	float angle;
-	bool armed;
+    EnemyShip* e;
+    void seek();
+    void update();
+    void drawReticle(bool);
 };
 
 // Secondary Weapon Declarations
@@ -91,6 +96,8 @@ class Secondary : public Basic
 {
 public:
 	Reticle reticle;
+    bool armed;
+    bool locked;
 public:
 	Secondary();
 	void setVelocity(float*);
